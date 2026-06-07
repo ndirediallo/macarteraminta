@@ -33,15 +33,16 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
+      background: linear-gradient(135deg, #060E1F 0%, #0D1B3E 55%, #16275e 100%);
     }
 
     .login-card {
       background: #fff;
-      border-radius: 18px;
+      border-radius: 22px;
       padding: 44px 40px;
       width: 100%;
       max-width: 400px;
-      box-shadow: 0 4px 30px rgba(45,49,146,0.1);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.07);
     }
 
     .login-logo {
@@ -163,10 +164,16 @@
 
     .stat-card {
       background: #fff;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 22px 24px;
-      box-shadow: 0 1px 10px rgba(0,0,0,.05);
+      box-shadow: 0 2px 16px rgba(0,0,0,.06);
+      border-left: 4px solid var(--brand-l);
+      transition: transform .2s, box-shadow .2s;
     }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.1); }
+    .stat-card:nth-child(2) { border-left-color: #BFDBFE; }
+    .stat-card:nth-child(3) { border-left-color: #DDD6FE; }
+    .stat-card:nth-child(4) { border-left-color: #BBF7D0; }
 
     .stat-label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
     .stat-value { font-size: 32px; font-weight: 800; color: var(--brand); }
@@ -342,12 +349,71 @@
     .dot-green  { background: var(--green); }
     .dot-gray   { background: var(--muted); }
 
+    /* ── MOBILE-FIRST RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
     @media (max-width: 768px) {
-      .main-content { padding: 20px 16px; }
-      .topbar { padding: 0 16px; }
-      table { font-size: 13px; }
-      th, td { padding: 11px 12px; }
-      .login-card { padding: 32px 20px; }
+      .main-content { padding: 18px 14px; }
+      .topbar { padding: 0 14px; height: 54px; }
+      .topbar-logo img { height: 28px; }
+      .topbar-title { font-size: 13px; }
+      .topbar-user { display: none; }
+      .section-header { flex-direction: column; align-items: flex-start; }
+      .login-card { padding: 36px 24px; }
+
+      /* ── TABLE → CARD VIEW ON MOBILE ── */
+      .table-wrap {
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        overflow: visible;
+      }
+      #tableContainer { overflow-x: visible !important; }
+      table, tbody { display: block; width: 100%; }
+      thead { display: none; }
+      tbody tr {
+        display: block;
+        background: #fff;
+        border-radius: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 14px rgba(0,0,0,.07);
+        border: 1.5px solid var(--border);
+        overflow: hidden;
+      }
+      tbody tr:hover { background: #fff; transform: none; }
+      td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--border);
+        font-size: 13.5px;
+        min-height: 46px;
+        gap: 8px;
+      }
+      td:last-child { border-bottom: none; }
+      td::before {
+        content: attr(data-label);
+        font-size: 10px;
+        font-weight: 800;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        flex-shrink: 0;
+        min-width: 80px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat-value { font-size: 26px; }
+      .stat-card { padding: 16px 16px; }
+      .stat-label { font-size: 10.5px; }
+      .login-card { padding: 28px 18px; border-radius: 18px; }
+      .login-title { font-size: 18px; }
+      .btn-csv span, .btn-refresh span { display: none; }
     }
   </style>
 </head>
@@ -366,10 +432,10 @@
 
     <form id="loginForm" novalidate>
       <label class="fl" for="usr">Nom d'utilisateur</label>
-      <input class="fi" type="text" id="usr" placeholder="raminta" autocomplete="username">
+      <input class="fi" type="text" id="usr" autocomplete="username">
 
       <label class="fl" for="pwd">Mot de passe</label>
-      <input class="fi" type="password" id="pwd" placeholder="••••" autocomplete="current-password">
+      <input class="fi" type="password" id="pwd" autocomplete="current-password">
 
       <button type="submit" class="btn">Se connecter</button>
     </form>
@@ -439,7 +505,7 @@
               <th>Date</th>
               <th>Nom complet</th>
               <th>Naissance</th>
-              <th>Pièce d'identité</th>
+              <th>N° Pièce d'identité</th>
               <th>Téléphone</th>
               <th>Email</th>
               <th>Statut</th>
@@ -521,15 +587,15 @@
       const isActive = d.status === 'active';
       return `
       <tr id="row-${d.id}">
-        <td><div class="row-num">${i + 1}</div></td>
-        <td class="td-date">${d.date || '—'}</td>
-        <td class="td-name">${esc(d.prenom)} ${esc(d.nom)}</td>
-        <td>${d.dob || '—'}</td>
-        <td><span class="badge">${esc(d.idType || '—')}</span><br>
+        <td data-label="#"><div class="row-num">${i + 1}</div></td>
+        <td data-label="Date" class="td-date">${d.date || '—'}</td>
+        <td data-label="Nom" class="td-name">${esc(d.prenom)} ${esc(d.nom)}</td>
+        <td data-label="Naissance">${d.dob || '—'}</td>
+        <td data-label="N° Pièce d'identité"><span class="badge">${esc(d.idType || '—')}</span><br>
             <span style="font-size:12px;color:#6B7280">${esc(d.idNumber || '')}</span></td>
-        <td>${esc(d.phone || '—')}</td>
-        <td>${esc(d.email || '—')}</td>
-        <td>
+        <td data-label="Téléphone">${esc(d.phone || '—')}</td>
+        <td data-label="Email">${esc(d.email || '—')}</td>
+        <td data-label="Statut">
           <button class="btn-status ${isActive ? 'active' : 'inactive'}"
                   id="btn-${d.id}"
                   onclick="toggleStatus('${d.id}', '${isActive ? 'active' : 'inactive'}')">
@@ -579,7 +645,7 @@
     document.getElementById('statTotal').textContent = data.length;
 
     const today = new Date().toLocaleDateString('fr-FR');
-    const todayCount = data.filter(d => (d.date || '').startsWith(today.split('/').reverse().join('/')));
+    const todayCount = data.filter(d => (d.date || '').startsWith(today));
     document.getElementById('statToday').textContent = todayCount.length;
 
     const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
