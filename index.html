@@ -3,491 +3,1384 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commande Carte Visa Prépayée – Raminta Guinée</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Raminta Business – Carte Visa Prépayée Internationale en Guinée</title>
+  <meta name="description" content="Obtenez votre carte Visa prépayée internationale en Guinée. Paiements en ligne, abonnements, voyages. Rechargeable via Orange Money et MTN Mobile Money.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
-      --brand:   #2D3192;
-      --brand-l: #eef0fc;
-      --green:   #16A34A;
-      --green-h: #15803D;
-      --text:    #111827;
-      --muted:   #6B7280;
-      --border:  #E5E7EB;
-      --bg:      #F4F5FB;
-      --red:     #DC2626;
+      --primary: #0A1628;
+      --primary-light: #1E3A8A;
+      --accent: #00C896;
+      --accent-dark: #00A87A;
+      --gold: #F59E0B;
+      --white: #FFFFFF;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-400: #9CA3AF;
+      --gray-600: #4B5563;
+      --gray-800: #1F2937;
+      --radius: 16px;
     }
-
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--gray-800); background: #fff; overflow-x: hidden; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 0 0 60px;
-    }
-
-    /* ── FORM LOGO ── */
-    .form-logo {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .form-logo img {
-      height: 64px;
-      width: auto;
-      object-fit: contain;
-    }
-
-    .form-logo-fallback {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--brand);
-      letter-spacing: -0.4px;
-      display: none;
-    }
-
-    /* ── PAGE HEADER ── */
-    .page-header {
+    /* ── PROMO BANNER ── */
+    .promo-banner {
+      background: linear-gradient(90deg, #00A87A, #00C896, #00A87A);
+      background-size: 200% auto;
+      animation: shimmerBg 4s linear infinite;
+      color: white;
       text-align: center;
-      padding: 36px 20px 28px;
+      padding: 11px 16px;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
     }
+    @keyframes shimmerBg { to { background-position: 200% center; } }
+    .promo-banner strong { font-weight: 800; }
+    .promo-close { float: right; cursor: pointer; background: none; border: none; color: white; font-size: 18px; line-height: 1; opacity: 0.7; }
+    .promo-close:hover { opacity: 1; }
 
-    .page-header h1 {
-      font-size: clamp(20px, 4vw, 26px);
-      font-weight: 800;
-      color: var(--brand);
-      letter-spacing: -0.4px;
-      margin-bottom: 6px;
-    }
-
-    .page-header p {
-      font-size: 15px;
-      color: var(--muted);
-    }
-
-    /* ── MAIN GRID ── */
-    .main {
-      max-width: 1020px;
-      margin: 0 auto;
+    /* ── NAV ── */
+    nav {
+      background: rgba(10,22,40,0.97);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
       padding: 0 20px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      align-items: start;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-
-    /* mobile: form first, benefits second */
-    .col-form  { order: 1; }
-    .col-perks { order: 2; }
-
-    /* ── FORM CARD ── */
-    .form-card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.07);
-      padding: 36px 32px;
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
     }
-
-    .form-card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .form-group { margin-bottom: 18px; }
-
-    label {
-      display: block;
-      font-size: 12.5px;
+    .logo { font-size: 21px; font-weight: 900; color: white; text-decoration: none; letter-spacing: -0.5px; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .3s; }
+    .nav-links a:hover { color: white; }
+    .nav-cta {
+      background: var(--accent);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 14px;
       font-weight: 700;
-      color: #374151;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
+      text-decoration: none;
+      transition: all .3s;
+      white-space: nowrap;
     }
+    .nav-cta:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,200,150,.4); }
+    @media(max-width:768px) { .nav-links { display: none; } }
 
-    label .req { color: var(--red); margin-left: 2px; }
-
-    input, select {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 14.5px;
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      background: #FAFAFA;
-      transition: border-color .2s, box-shadow .2s, background .2s;
-      outline: none;
-      appearance: none;
-      -webkit-appearance: none;
-    }
-
-    input::placeholder { color: #C4C9D4; }
-
-    input:focus, select:focus {
-      border-color: var(--brand);
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(45,49,146,0.1);
-    }
-
-    input.err-field  { border-color: var(--red); background: #fff5f5; }
-    select.err-field { border-color: var(--red); background: #fff5f5; }
-
-    select {
-      cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 13px center;
-      background-color: #FAFAFA;
-      padding-right: 40px;
-    }
-
-    .row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .err-msg {
-      font-size: 11.5px;
-      color: var(--red);
-      margin-top: 4px;
-      display: none;
-    }
-    .err-msg.show { display: block; }
-
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      background: var(--green);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: background .2s, transform .15s, box-shadow .2s;
-      margin-top: 6px;
-      letter-spacing: 0.1px;
-      box-shadow: 0 4px 14px rgba(22,163,74,0.35);
-    }
-
-    .btn-submit:hover  { background: var(--green-h); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(22,163,74,.45); }
-    .btn-submit:active { transform: translateY(0); box-shadow: none; }
-
-    .form-note {
-      text-align: center;
-      font-size: 11.5px;
-      color: #9CA3AF;
-      margin-top: 16px;
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #060E1F 0%, #0A1628 45%, #142b5e 100%);
+      min-height: 100vh;
       display: flex;
       align-items: center;
+      padding: 100px 20px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(0,200,150,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      left: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(30,58,138,0.4) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,200,150,0.15);
+      border: 1px solid rgba(0,200,150,0.35);
+      color: #5EFCD8;
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 4.5vw, 58px);
+      font-weight: 900;
+      line-height: 1.08;
+      color: white;
+      margin-bottom: 20px;
+      letter-spacing: -1.5px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #00C896, #7EECD9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 18px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+    .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: all .3s;
+      box-shadow: 0 8px 30px rgba(0,200,150,.4);
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 45px rgba(0,200,150,.55); }
+    .btn-wa {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 13px 26px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: all .3s;
+      backdrop-filter: blur(10px);
+    }
+    .btn-wa:hover { background: rgba(37,211,102,.2); border-color: #25D366; transform: translateY(-3px); }
+    .hero-stats {
+      display: flex;
+      gap: 28px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { display: flex; flex-direction: column; }
+    .hero-stat-num { font-size: 26px; font-weight: 800; color: white; }
+    .hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.45); font-weight: 500; margin-top: 2px; }
+    .hero-stat-div { width: 1px; background: rgba(255,255,255,0.12); }
+
+    /* 3D CARD */
+    .hero-visual {
+      display: flex;
       justify-content: center;
-      gap: 5px;
+      align-items: center;
+    }
+    .card-scene {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      perspective: 1200px;
+    }
+    .card-3d {
+      width: 100%;
+      aspect-ratio: 1.586;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #1a237e 0%, #283593 40%, #1565c0 70%, #0d47a1 100%);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
+      padding: 28px 30px;
+      position: relative;
+      overflow: hidden;
+      transform: rotateY(-14deg) rotateX(6deg);
+      animation: cardFloat 7s ease-in-out infinite;
+      transform-style: preserve-3d;
+    }
+    @keyframes cardFloat {
+      0%,100% { transform: rotateY(-14deg) rotateX(6deg) translateY(0); }
+      50% { transform: rotateY(-10deg) rotateX(3deg) translateY(-14px); }
+    }
+    .card-3d::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 25% 25%, rgba(255,255,255,0.18), transparent 55%);
+      border-radius: 22px;
+    }
+    .card-3d::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+      border-radius: 22px;
+    }
+    .card-inner { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .card-logo-text { font-size: 17px; font-weight: 900; color: rgba(255,255,255,0.9); letter-spacing: 1px; }
+    .card-chip {
+      width: 44px;
+      height: 34px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #FFD54F, #FF8F00);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-chip::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgba(0,0,0,0.12) 0, rgba(0,0,0,0.12) 1px, transparent 1px, transparent 14px); }
+    .card-chip::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.2); }
+    .card-number {
+      font-size: 20px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.88);
+      letter-spacing: 3.5px;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .card-label { font-size: 10px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+    .card-value { font-size: 14px; font-weight: 600; color: white; }
+    .card-visa-logo { font-size: 28px; font-weight: 900; font-style: italic; color: white; letter-spacing: -1px; text-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .card-nfc { position: absolute; top: 28px; right: 28px; color: rgba(255,255,255,0.5); font-size: 22px; }
+
+    .card-badge {
+      position: absolute;
+      background: white;
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-800);
+      animation: badgeFloat 5s ease-in-out infinite;
+      z-index: 2;
+    }
+    .badge-top { top: -18px; right: -18px; animation-delay: 0s; }
+    .badge-bottom { bottom: -18px; left: -18px; animation-delay: -2.5s; }
+    @keyframes badgeFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .badge-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .badge-small { font-size: 11px; color: var(--gray-400); font-weight: 400; margin-top: 1px; }
+
+    @media(max-width:900px) {
+      .hero-container { grid-template-columns: 1fr; text-align: center; gap: 48px; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .hero-buttons { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .badge-top, .badge-bottom { display: none; }
+    }
+    @media(max-width:480px) {
+      .card-number { font-size: 15px; letter-spacing: 2px; }
+      .card-3d { padding: 20px 22px; }
     }
 
-    /* ── SUCCESS ── */
-    .success {
+    /* ── SECTIONS SHARED ── */
+    section { padding: 90px 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(0,200,150,0.1);
+      color: var(--accent-dark);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+    .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 900; color: var(--primary); margin-bottom: 14px; letter-spacing: -0.8px; line-height: 1.15; }
+    .section-sub { font-size: 17px; color: var(--gray-600); max-width: 580px; margin: 0 auto; line-height: 1.65; }
+    .dark-tag { background: rgba(0,200,150,0.15); color: #5EFCD8; }
+    .dark-title { color: white; }
+    .dark-sub { color: rgba(255,255,255,0.55); }
+
+    /* ── BENEFITS ── */
+    .benefits { background: var(--gray-50); }
+    .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(256px, 1fr)); gap: 22px; }
+    .benefit-card {
+      background: white;
+      border-radius: 18px;
+      padding: 28px 26px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+      border: 1.5px solid var(--gray-100);
+      transition: all .35s cubic-bezier(.34,1.56,.64,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .benefit-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 3px; width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--primary-light));
+      transition: width .35s ease;
+    }
+    .benefit-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.11); border-color: rgba(0,200,150,.25); }
+    .benefit-card:hover::after { width: 100%; }
+    .benefit-icon {
+      width: 54px; height: 54px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(0,200,150,.14), rgba(0,200,150,.04));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; color: var(--accent-dark);
+      margin-bottom: 16px;
+    }
+    .benefit-title { font-size: 15.5px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .benefit-desc { font-size: 14px; color: var(--gray-600); line-height: 1.55; }
+
+    /* ── WHERE TO USE ── */
+    .where-section { background: var(--primary); }
+    .brands-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+    .brand-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 20px 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      transition: all .3s;
+      cursor: default;
+    }
+    .brand-card:hover { background: rgba(255,255,255,0.11); border-color: var(--accent); transform: translateY(-5px); }
+    .brand-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; }
+    .brand-name { font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.8); text-align: center; }
+    .brands-footer { text-align: center; margin-top: 36px; font-size: 16px; color: rgba(255,255,255,0.5); }
+    .brands-footer strong { color: var(--accent); }
+
+    /* ── STEPS ── */
+    .steps-section { background: white; }
+    .steps-wrap { max-width: 680px; margin: 0 auto; position: relative; }
+    .steps-wrap::before {
+      content: '';
+      position: absolute;
+      left: 29px; top: 60px; bottom: 60px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--primary-light));
+      z-index: 0;
+    }
+    .step { display: flex; gap: 26px; align-items: flex-start; padding: 18px 0; }
+    .step-num {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 8px 22px rgba(0,200,150,.4);
+      position: relative; z-index: 1;
+    }
+    .step-body { padding-top: 14px; }
+    .step-title { font-size: 17px; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+    .step-desc { font-size: 14.5px; color: var(--gray-600); line-height: 1.55; }
+    @media(max-width:600px) { .steps-wrap::before { display: none; } }
+
+    /* ── FORM SECTION ── */
+    .form-section { background: linear-gradient(135deg, #F0FDF9 0%, #EEF2FF 100%); }
+    .form-card {
+      background: white;
+      border-radius: 26px;
+      padding: 52px 48px;
+      max-width: 720px;
+      margin: 0 auto;
+      box-shadow: 0 30px 80px rgba(0,0,0,.1), 0 0 0 1px rgba(0,200,150,.07);
+    }
+    .form-card-header { text-align: center; margin-bottom: 36px; }
+    .form-card-header h2 { font-size: 28px; font-weight: 900; color: var(--primary); margin-bottom: 8px; letter-spacing: -.5px; }
+    .form-card-header p { color: var(--gray-600); font-size: 15px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .fg { display: flex; flex-direction: column; gap: 6px; }
+    .fg.full { grid-column: 1 / -1; }
+    label.fl { font-size: 12.5px; font-weight: 700; color: var(--gray-800); letter-spacing: .4px; text-transform: uppercase; }
+    label.fl span { color: #EF4444; }
+    .fi {
+      padding: 13px 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--gray-800);
+      transition: all .25s;
+      outline: none;
+      background: var(--gray-50);
+      width: 100%;
+    }
+    .fi:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(0,200,150,.1); }
+    .fi.err { border-color: #EF4444; background: #FFF5F5; }
+    .fi.ok { border-color: var(--accent); }
+    .err-msg { font-size: 11.5px; color: #EF4444; display: none; margin-top: 2px; }
+    .err-msg.show { display: block; }
+    .check-wrap {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--gray-50);
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: border-color .25s;
+      cursor: pointer;
+      grid-column: 1 / -1;
+    }
+    .check-wrap:hover { border-color: var(--accent); }
+    .check-wrap input { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+    .check-wrap label { font-size: 14px; color: var(--gray-600); line-height: 1.5; cursor: pointer; }
+    .btn-submit {
+      width: 100%;
+      padding: 17px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .3s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 8px 28px rgba(0,200,150,.4);
+      font-family: 'Inter', sans-serif;
+      grid-column: 1 / -1;
+      margin-top: 4px;
+    }
+    .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,200,150,.55); }
+    .btn-submit:active { transform: translateY(0); }
+    .success-box {
       display: none;
       text-align: center;
-      padding: 16px 0;
+      padding: 28px;
+      background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      margin-top: 20px;
     }
-    .success.show { display: block; }
+    .success-box.show { display: block; }
+    .success-box .s-icon { font-size: 42px; margin-bottom: 12px; }
+    .success-box h3 { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+    .success-box p { font-size: 14px; color: var(--gray-600); line-height: 1.5; }
+    @media(max-width:640px) {
+      .form-card { padding: 28px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
 
-    .success-circle {
-      width: 64px; height: 64px;
-      background: #F0FDF4;
-      border: 2px solid #86EFAC;
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--gray-50); }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 22px; }
+    .testi-card {
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.05);
+      border: 1.5px solid var(--gray-100);
+      position: relative;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .testi-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,.1); }
+    .testi-quote { font-size: 60px; color: rgba(0,200,150,.12); font-family: Georgia, serif; line-height: 1; position: absolute; top: 16px; right: 20px; }
+    .testi-stars { color: var(--gold); font-size: 14px; display: flex; gap: 2px; margin-bottom: 14px; }
+    .testi-text { font-size: 14.5px; color: var(--gray-600); line-height: 1.65; margin-bottom: 20px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; color: white; flex-shrink: 0; }
+    .testi-name { font-size: 15px; font-weight: 700; color: var(--primary); }
+    .testi-loc { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+    /* ── FAQ ── */
+    .faq-section { background: white; }
+    .faq-wrap { max-width: 780px; margin: 0 auto; }
+    .faq-item {
+      border: 2px solid var(--gray-100);
+      border-radius: 16px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .faq-item.open { border-color: var(--accent); box-shadow: 0 4px 20px rgba(0,200,150,.1); }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: left;
+      gap: 16px;
+    }
+    .faq-q:hover { background: var(--gray-50); }
+    .faq-icon {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      color: var(--gray-600);
+      flex-shrink: 0;
+      transition: all .3s;
+    }
+    .faq-item.open .faq-icon { background: var(--accent); color: white; transform: rotate(45deg); }
+    .faq-body { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+    .faq-body-inner { padding: 0 24px 20px; font-size: 14.5px; color: var(--gray-600); line-height: 1.65; }
+    .faq-item.open .faq-body { max-height: 260px; }
+
+    /* ── SECURITY ── */
+    .security-section { background: linear-gradient(135deg, #060E1F, #0A1628 50%, #142b5e); }
+    .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .sec-item {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 18px;
+      padding: 28px 24px;
+      transition: all .3s;
+    }
+    .sec-item:hover { background: rgba(255,255,255,.09); border-color: var(--accent); transform: translateY(-5px); }
+    .sec-icon { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; }
+    .sec-title { font-size: 16px; font-weight: 700; color: white; }
+    .sec-desc { font-size: 13.5px; color: rgba(255,255,255,.5); line-height: 1.55; }
+
+    /* ── FOOTER ── */
+    footer { background: #030810; color: white; padding: 70px 20px 30px; }
+    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 50px; }
+    .footer-logo { display: block; font-size: 22px; font-weight: 900; color: white; text-decoration: none; margin-bottom: 14px; letter-spacing: -.5px; }
+    .footer-logo span { color: var(--accent); }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,.4); line-height: 1.6; margin-bottom: 22px; }
+    .footer-contact { display: flex; flex-direction: column; gap: 10px; }
+    .footer-contact-item { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: rgba(255,255,255,.55); }
+    .footer-contact-item i { color: var(--accent); width: 16px; }
+    .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+    .soc-link {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.07);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.55);
+      font-size: 16px;
+      text-decoration: none;
+      transition: all .3s;
+    }
+    .soc-link:hover { background: var(--accent); color: white; transform: translateY(-3px); }
+    .footer-head { font-size: 13px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 18px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { color: rgba(255,255,255,.45); text-decoration: none; font-size: 14px; transition: color .25s; }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.25); }
+    .footer-visa-badge { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,.3); }
+    @media(max-width:900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width:520px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    /* ── FLOATING BUTTONS ── */
+    .float-wa {
+      position: fixed; bottom: 88px; right: 22px;
+      width: 58px; height: 58px;
+      background: #25D366;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
-      margin: 0 auto 16px;
+      color: white; font-size: 27px;
+      text-decoration: none;
+      box-shadow: 0 8px 28px rgba(37,211,102,.55);
+      z-index: 999;
+      transition: transform .3s;
+      animation: waPulse 2.5s infinite;
     }
-
-    .success h2 { font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-    .success p  { font-size: 14px; color: var(--muted); line-height: 1.6; }
-
-    /* ── PERKS PANEL ── */
-    .perks-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    .float-wa:hover { transform: scale(1.1); }
+    @keyframes waPulse {
+      0%,100% { box-shadow: 0 8px 28px rgba(37,211,102,.55); }
+      50% { box-shadow: 0 8px 48px rgba(37,211,102,.8); }
     }
-
-    .perks-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--brand);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 4px;
-    }
-
-    .perk {
-      background: #fff;
-      border-radius: 14px;
-      padding: 18px 20px;
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      box-shadow: 0 1px 10px rgba(0,0,0,0.05);
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .perk:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(45,49,146,0.1);
-    }
-
-    .perk-icon {
-      width: 44px; height: 44px;
-      flex-shrink: 0;
+    .float-top {
+      position: fixed; bottom: 22px; right: 22px;
+      width: 48px; height: 48px;
+      background: var(--primary);
       border-radius: 12px;
-      background: var(--brand-l);
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
+      color: white; font-size: 18px;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,0,0,.25);
+      z-index: 999;
+      transition: all .3s;
+      opacity: 0; pointer-events: none;
     }
+    .float-top.vis { opacity: 1; pointer-events: all; }
+    .float-top:hover { background: var(--accent); transform: translateY(-4px); }
 
-    .perk-body h3 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 3px;
-    }
+    /* ── FADE-IN ANIMATION ── */
+    .fade { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .fade.in { opacity: 1; transform: translateY(0); }
+    .fade-l { opacity: 0; transform: translateX(-28px); transition: opacity .65s ease, transform .65s ease; }
+    .fade-l.in { opacity: 1; transform: translateX(0); }
+    .fade-r { opacity: 0; transform: translateX(28px); transition: opacity .65s ease, transform .65s ease; }
+    .fade-r.in { opacity: 1; transform: translateX(0); }
 
-    .perk-body p {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
+    /* ── MOBILE-FIRST PREMIUM ── */
+    @media (max-width: 768px) {
+      /* Nav */
+      nav { padding: 0 16px; }
+      .nav-inner { height: 58px; }
+      .logo { font-size: 18px; }
+      .nav-cta { padding: 9px 18px; font-size: 13px; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 760px) {
-      .main {
-        grid-template-columns: 1fr;
-      }
-      .col-form  { order: 1; }
-      .col-perks { order: 2; }
+      /* Hero */
+      .hero { padding: 80px 16px 60px; min-height: auto; }
+      .hero-container { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+      .hero p { margin-left: auto; margin-right: auto; font-size: 16px; }
+      .hero-buttons { justify-content: center; flex-direction: column; align-items: center; }
+      .btn-primary, .btn-wa { width: 100%; max-width: 320px; justify-content: center; }
+      .hero-stats { justify-content: center; gap: 20px; }
+      .hero-stat-num { font-size: 22px; }
+      .badge-top, .badge-bottom { display: none; }
+      .card-3d { max-width: 280px; margin: 0 auto; }
 
-      .page-header { padding: 28px 20px 20px; }
+      /* Sections */
+      section { padding: 64px 16px; }
+      .section-header { margin-bottom: 44px; }
+      .section-title { font-size: clamp(24px, 6vw, 34px); }
+      .section-sub { font-size: 15px; }
+
+      /* Where to use */
+      .brands-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .brand-card { padding: 14px 8px; border-radius: 12px; }
+      .brand-icon { width: 40px; height: 40px; font-size: 17px; border-radius: 10px; }
+      .brand-name { font-size: 11px; }
+
+      /* Steps */
+      .step { gap: 18px; }
+      .step-num { width: 48px; height: 48px; font-size: 17px; }
+      .step-title { font-size: 15px; }
+
+      /* Form */
+      .form-card { padding: 28px 20px; border-radius: 20px; }
+      .form-card-header h2 { font-size: 22px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .fg.full { grid-column: 1; }
+      .btn-submit { padding: 15px; font-size: 15px; }
+
+      /* Testimonials */
+      .testi-grid { grid-template-columns: 1fr; }
+      .testi-card { padding: 22px 20px; }
+
+      /* FAQ */
+      .faq-q { font-size: 14px; padding: 16px 18px; }
+      .faq-body-inner { padding: 0 18px 16px; font-size: 13.5px; }
+
+      /* Security */
+      .security-grid { grid-template-columns: 1fr; gap: 12px; }
+      .sec-item { padding: 22px 20px; flex-direction: row; align-items: center; gap: 16px; }
+      .sec-icon { width: 44px; height: 44px; flex-shrink: 0; }
+
+      /* Footer */
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
+      footer { padding: 48px 16px 24px; }
+
+      /* Floating buttons */
+      .float-wa { bottom: 80px; right: 16px; width: 52px; height: 52px; font-size: 24px; }
+      .float-top { bottom: 18px; right: 16px; }
     }
 
     @media (max-width: 480px) {
-      .form-card { padding: 28px 18px; }
-      .row-2 { grid-template-columns: 1fr; }
+      .hero h1 { font-size: clamp(28px, 8vw, 40px); }
+      .promo-banner { font-size: 12px; padding: 9px 12px; }
+      .hero-badge { font-size: 12px; padding: 7px 14px; }
+      .brands-grid { grid-template-columns: repeat(3, 1fr); }
+      .section-title { letter-spacing: -.5px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── PAGE HEADER ── -->
-<div class="page-header">
-  <h1>Commande de carte Visa prépayée</h1>
-  <p>Votre carte internationale, disponible en Guinée</p>
+<!-- ── PROMO BANNER ── -->
+<div class="promo-banner" id="promoBanner">
+  <i class="fas fa-fire" style="margin-right:7px;opacity:.85"></i>
+  Offre de lancement : <strong>Frais d'activation réduits</strong> — Commandez maintenant et recevez votre carte sous 48h !
+  &nbsp;🎉
+  <button class="promo-close" onclick="document.getElementById('promoBanner').style.display='none'">×</button>
 </div>
 
-<!-- ── MAIN GRID ── -->
-<div class="main">
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">Raminta<span>Business</span></a>
+    <ul class="nav-links">
+      <li><a href="#comment">Comment ça marche</a></li>
+      <li><a href="#commander">Commander</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="#commander" class="nav-cta">Commander ma carte</a>
+  </div>
+</nav>
 
-  <!-- FORM -->
-  <div class="col-form">
-    <div class="form-card">
-      <div class="form-logo">
-        <img
-          src="Logo Raminta.png"
-          alt="Raminta Guinée"
-          id="logoImg"
-          onerror="this.style.display='none';document.getElementById('logoFb').style.display='block';"
-        >
-        <span class="form-logo-fallback" id="logoFb">Raminta Guinée</span>
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-container">
+    <div class="hero-content fade-l in">
+      <div class="hero-badge">
+        <i class="fas fa-check-circle"></i>
+        Service disponible en Guinée
       </div>
-      <p class="form-card-title">Remplissez le formulaire ci-dessous.</p>
+      <h1>Obtenez votre carte Visa prépayée <em>internationale</em></h1>
+      <p>Effectuez vos achats en ligne, payez vos abonnements, recevez des paiements et voyagez en toute sérénité grâce à votre carte Visa prépayée.</p>
+      <div class="hero-buttons">
+        <a href="#commander" class="btn-primary">
+          <i class="fas fa-credit-card"></i>
+          Commander ma carte
+        </a>
+        <a href="https://wa.me/224XXXXXXXXX?text=Bonjour%20Raminta%20Business%2C%20je%20souhaite%20obtenir%20une%20carte%20Visa%20prépayée." target="_blank" rel="noopener" class="btn-wa">
+          <i class="fab fa-whatsapp"></i>
+          Contact WhatsApp
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">500+</div>
+          <div class="hero-stat-label">Clients satisfaits</div>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">48h</div>
+          <div class="hero-stat-label">Délai d'activation</div>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">150+</div>
+          <div class="hero-stat-label">Pays acceptés</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual fade-r in">
+      <div class="card-scene">
+        <div class="card-3d">
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-logo-text">RAMINTA</div>
+              <div class="card-chip"></div>
+            </div>
+            <div class="card-number">4532 •••• •••• 7891</div>
+            <div class="card-bottom">
+              <div>
+                <div class="card-label">Titulaire</div>
+                <div class="card-value">RAMINTA GUINÉE</div>
+              </div>
+              <div>
+                <div class="card-label">Expire</div>
+                <div class="card-value">12/28</div>
+              </div>
+              <div class="card-visa-logo">VISA</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-badge badge-top">
+          <div class="badge-icon" style="background:#E8F5E9">🌍</div>
+          <div>
+            <div style="font-weight:700;font-size:13px">Acceptée partout</div>
+            <div class="badge-small">+150 pays dans le monde</div>
+          </div>
+        </div>
+        <div class="card-badge badge-bottom">
+          <div class="badge-icon" style="background:#FFF8E1">⚡</div>
+          <div>
+            <div style="font-weight:700;font-size:13px">Activation rapide</div>
+            <div class="badge-small">Livraison en 48h</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ── WHERE TO USE ── -->
+<section class="where-section" id="utilisation">
+  <div class="container">
+    <div class="section-header fade">
+      <div class="section-tag dark-tag">Compatibilité universelle</div>
+      <h2 class="section-title dark-title">Où utiliser votre carte ?</h2>
+      <p class="section-sub dark-sub">Votre carte Visa prépayée fonctionne sur des milliers de plateformes dans le monde entier.</p>
+    </div>
+    <div class="brands-grid">
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#FF9900;color:white;font-size:14px;font-weight:900">amzn</div>
+        <div class="brand-name">Amazon</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#E8441A;color:white;font-size:13px;font-weight:900">ALI</div>
+        <div class="brand-name">Alibaba</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#1877F2;color:white"><i class="fab fa-facebook"></i></div>
+        <div class="brand-name">Facebook Ads</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#4285F4;color:white"><i class="fab fa-google"></i></div>
+        <div class="brand-name">Google Ads</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#E50914;color:white"><i class="fab fa-netflix" style="font-size:16px"></i></div>
+        <div class="brand-name">Netflix</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#1DB954;color:white"><i class="fab fa-spotify"></i></div>
+        <div class="brand-name">Spotify</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#000;color:white"><i class="fab fa-apple"></i></div>
+        <div class="brand-name">Apple Store</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#01875F;color:white"><i class="fab fa-google-play"></i></div>
+        <div class="brand-name">Google Play</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#003580;color:white;font-size:13px;font-weight:900">BKG</div>
+        <div class="brand-name">Booking</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#FF5A5F;color:white"><i class="fab fa-airbnb"></i></div>
+        <div class="brand-name">Airbnb</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#10A37F;color:white;font-size:13px;font-weight:900">GPT</div>
+        <div class="brand-name">ChatGPT</div>
+      </div>
+      <div class="brand-card fade">
+        <div class="brand-icon" style="background:#00C4CC;color:white;font-size:13px;font-weight:900">C</div>
+        <div class="brand-name">Canva</div>
+      </div>
+    </div>
+    <p class="brands-footer fade">Et bien plus encore — <strong>partout où Visa est acceptée dans le monde</strong></p>
+  </div>
+</section>
+
+<!-- ── STEPS ── -->
+<section class="steps-section" id="comment">
+  <div class="container">
+    <div class="section-header fade">
+      <div class="section-tag">Processus simple</div>
+      <h2 class="section-title">Comment ça marche ?</h2>
+      <p class="section-sub">Obtenez votre carte Visa en 5 étapes simples. Tout se passe en ligne, sans déplacement nécessaire.</p>
+    </div>
+    <div class="steps-wrap">
+      <div class="step fade">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Remplissez votre demande</div>
+          <div class="step-desc">Complétez le formulaire en ligne avec vos informations personnelles et votre montant de recharge initial souhaité. Cela prend moins de 3 minutes.</div>
+        </div>
+      </div>
+      <div class="step fade">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Validation de votre dossier</div>
+          <div class="step-desc">Notre équipe vérifie vos informations et valide votre dossier dans les 24 heures. Vous recevez une confirmation par WhatsApp ou email.</div>
+        </div>
+      </div>
+      <div class="step fade">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Paiement des frais</div>
+          <div class="step-desc">Procédez au règlement des frais d'activation facilement via Orange Money, MTN Mobile Money ou en espèces à notre bureau de Conakry.</div>
+        </div>
+      </div>
+      <div class="step fade">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Activation de votre carte</div>
+          <div class="step-desc">Votre carte Visa prépayée est activée sous 48h après réception du paiement. Vous recevez vos identifiants sécurisés par SMS et email.</div>
+        </div>
+      </div>
+      <div class="step fade">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Commencez vos paiements</div>
+          <div class="step-desc">Votre carte est prête ! Utilisez-la immédiatement pour vos achats en ligne, abonnements, publicités et bien plus encore partout dans le monde.</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:50px">
+      <a href="#commander" class="btn-primary" style="display:inline-flex">
+        <i class="fas fa-credit-card"></i>
+        Commander ma carte maintenant
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── ORDER FORM ── -->
+<section class="form-section" id="commander">
+  <div class="container">
+    <div class="section-header fade">
+      <div class="section-tag">Commande en ligne</div>
+      <h2 class="section-title">Commander ma carte Visa</h2>
+      <p class="section-sub">Remplissez le formulaire ci-dessous. Notre équipe vous contactera sous 24h pour finaliser votre commande.</p>
+    </div>
+    <div class="form-card fade">
+      <div class="form-card-header">
+        <div style="font-size:38px;margin-bottom:10px">💳</div>
+        <h2>Formulaire de commande</h2>
+        <p>Tous les champs marqués d'un <span style="color:#EF4444">*</span> sont obligatoires</p>
+      </div>
       <form id="orderForm" novalidate>
-
-        <div class="row-2">
-          <div class="form-group">
-            <label for="prenom">Prénom <span class="req">*</span></label>
-            <input type="text" id="prenom" placeholder="Mamadou" autocomplete="given-name">
-            <div class="err-msg" id="e-prenom">Champ requis.</div>
+        <div class="form-grid">
+          <div class="fg full">
+            <label class="fl" for="fullName">Nom complet <span>*</span></label>
+            <input class="fi" type="text" id="fullName" name="fullName" placeholder="Ex: Mamadou Bah Diallo" autocomplete="name">
+            <span class="err-msg" id="e-fullName">Veuillez entrer votre nom complet.</span>
           </div>
-          <div class="form-group">
-            <label for="nom">NOM <span class="req">*</span></label>
-            <input type="text" id="nom" placeholder="DIALLO" autocomplete="family-name">
-            <div class="err-msg" id="e-nom">Champ requis.</div>
+          <div class="fg">
+            <label class="fl" for="phone">Numéro de téléphone <span>*</span></label>
+            <input class="fi" type="tel" id="phone" name="phone" placeholder="+224 6XX XXX XXX" autocomplete="tel">
+            <span class="err-msg" id="e-phone">Veuillez entrer un numéro valide.</span>
           </div>
+          <div class="fg">
+            <label class="fl" for="email">Adresse e-mail <span>*</span></label>
+            <input class="fi" type="email" id="email" name="email" placeholder="vous@exemple.com" autocomplete="email">
+            <span class="err-msg" id="e-email">Veuillez entrer un email valide.</span>
+          </div>
+          <div class="fg">
+            <label class="fl" for="city">Ville <span>*</span></label>
+            <select class="fi" id="city" name="city" style="cursor:pointer">
+              <option value="">— Sélectionnez votre ville —</option>
+              <option>Conakry</option>
+              <option>Kindia</option>
+              <option>Labé</option>
+              <option>Kankan</option>
+              <option>Nzérékoré</option>
+              <option>Mamou</option>
+              <option>Boké</option>
+              <option>Faranah</option>
+              <option>Autre</option>
+            </select>
+            <span class="err-msg" id="e-city">Veuillez sélectionner votre ville.</span>
+          </div>
+          <div class="fg">
+            <label class="fl" for="idNumber">Numéro de pièce d'identité <span>*</span></label>
+            <input class="fi" type="text" id="idNumber" name="idNumber" placeholder="CNI / Passeport / Permis">
+            <span class="err-msg" id="e-idNumber">Veuillez entrer votre numéro de pièce d'identité.</span>
+          </div>
+          <div class="fg full">
+            <label class="fl" for="amount">Montant de recharge initial souhaité (GNF) <span>*</span></label>
+            <select class="fi" id="amount" name="amount" style="cursor:pointer">
+              <option value="">— Sélectionnez un montant —</option>
+              <option>50 000 GNF (~5 USD)</option>
+              <option>100 000 GNF (~10 USD)</option>
+              <option>250 000 GNF (~25 USD)</option>
+              <option>500 000 GNF (~50 USD)</option>
+              <option>1 000 000 GNF (~100 USD)</option>
+              <option>Montant personnalisé (à préciser avec l'équipe)</option>
+            </select>
+            <span class="err-msg" id="e-amount">Veuillez sélectionner un montant.</span>
+          </div>
+          <div class="check-wrap">
+            <input type="checkbox" id="confirm" name="confirm">
+            <label for="confirm">Je confirme l'exactitude des informations fournies et j'accepte d'être contacté(e) par Raminta Business pour traiter ma demande de carte Visa prépayée.</label>
+          </div>
+          <span class="err-msg full" id="e-confirm" style="grid-column:1/-1">Vous devez confirmer l'exactitude des informations.</span>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i>
+            Commander ma carte Visa
+          </button>
         </div>
-
-        <div class="form-group">
-          <label for="dob">Date de naissance <span class="req">*</span></label>
-          <input type="date" id="dob" autocomplete="bday">
-          <div class="err-msg" id="e-dob">Champ requis.</div>
-        </div>
-
-        <div class="form-group">
-          <label for="idType">Type de pièce d'identité <span class="req">*</span></label>
-          <select id="idType">
-            <option value="">— Sélectionnez —</option>
-            <option>Carte d'identité</option>
-            <option>Passeport</option>
-            <option>Carte Scolaire</option>
-            <option>Autres</option>
-          </select>
-          <div class="err-msg" id="e-idType">Champ requis.</div>
-        </div>
-
-        <div class="form-group">
-          <label for="idNumber">Numéro de pièce d'identité <span class="req">*</span></label>
-          <input type="text" id="idNumber" placeholder="Ex : GN-123456789">
-          <div class="err-msg" id="e-idNumber">Champ requis.</div>
-        </div>
-
-        <div class="form-group">
-          <label for="phone">Numéro de téléphone <span class="req">*</span></label>
-          <input type="tel" id="phone" placeholder="+224 6XX XXX XXX" autocomplete="tel">
-          <div class="err-msg" id="e-phone">Numéro invalide.</div>
-        </div>
-
-        <div class="form-group">
-          <label for="email">Adresse e-mail <span class="req">*</span></label>
-          <input type="email" id="email" placeholder="vous@exemple.com" autocomplete="email">
-          <div class="err-msg" id="e-email">Email invalide.</div>
-        </div>
-
-        <button type="submit" class="btn-submit">Commander ma carte Visa</button>
-
       </form>
-
-      <div class="success" id="success">
-        <div class="success-circle">✓</div>
-        <h2>Demande envoyée !</h2>
-        <p>Votre demande a bien été transmise.<br>Notre équipe vous contactera sous 24h.</p>
-      </div>
-
-      <p class="form-note">
-        🔒 Vos données sont confidentielles
-      </p>
-    </div>
-  </div>
-
-  <!-- BENEFITS -->
-  <div class="col-perks">
-    <p class="perks-title">Pourquoi cette carte ?</p>
-
-    <div class="perk">
-      <div class="perk-icon">📱</div>
-      <div class="perk-body">
-        <h3>Rechargeable via Mobile Money</h3>
-        <p>Rechargez facilement avec Orange Money ou MTN Mobile Money, directement depuis votre téléphone.</p>
-      </div>
-    </div>
-
-    <div class="perk">
-      <div class="perk-icon">🛒</div>
-      <div class="perk-body">
-        <h3>Paiement en ligne</h3>
-        <p>Achetez sur Amazon, Alibaba, payez Netflix, Spotify, Facebook Ads, ChatGPT et bien d'autres.</p>
-      </div>
-    </div>
-
-    <div class="perk">
-      <div class="perk-icon">🏧</div>
-      <div class="perk-body">
-        <h3>Retrait aux GAB du monde entier</h3>
-        <p>Retirez de l'argent en espèces dans tous les distributeurs automatiques acceptant Visa.</p>
-      </div>
-    </div>
-
-    <div class="perk">
-      <div class="perk-icon">🍽️</div>
-      <div class="perk-body">
-        <h3>Restaurants, Hôtels &amp; Commerces</h3>
-        <p>Réglez vos achats partout en Guinée et à l'étranger dans les commerces physiques qui acceptent Visa.</p>
-      </div>
-    </div>
-
-    <div class="perk">
-      <div class="perk-icon">✅</div>
-      <div class="perk-body">
-        <h3>Pas besoin de compte bancaire</h3>
-        <p>Aucune banque requise. Accessible à tous avec une simple pièce d'identité et un téléphone.</p>
+      <div class="success-box" id="successBox">
+        <div class="s-icon">🎉</div>
+        <h3>Demande envoyée avec succès !</h3>
+        <p>Merci pour votre commande. Un membre de l'équipe Raminta Business vous contactera sous 24h via WhatsApp ou email pour finaliser votre dossier.<br><br>
+        <strong>WhatsApp :</strong> <a href="https://wa.me/224XXXXXXXXX" style="color:var(--accent-dark)">+224 XX XX XX XX</a></p>
       </div>
     </div>
   </div>
+</section>
 
-</div>
+<!-- ── TESTIMONIALS ── -->
+<section class="testimonials" id="temoignages">
+  <div class="container">
+    <div class="section-header fade">
+      <div class="section-tag">Ils nous font confiance</div>
+      <h2 class="section-title">Ce que disent nos clients</h2>
+      <p class="section-sub">Rejoignez des centaines de Guinéens qui profitent déjà de leur carte Visa Raminta.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="testi-text">« Grâce à ma carte Raminta, j'ai pu payer mes publicités Facebook Ads sans aucun problème. En tant que commerçant, ça a complètement changé mon activité en ligne. Le service est rapide et l'équipe très réactive. »</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#1E3A8A,#00C896)">MB</div>
+          <div>
+            <div class="testi-name">Mamadou Bah</div>
+            <div class="testi-loc">Commerçant — Conakry</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="testi-text">« Je cherchais une solution pour payer mes abonnements Netflix et Spotify depuis Conakry. Raminta Business m'a fourni une carte en seulement 2 jours. Tout fonctionne parfaitement ! Je recommande à 100%. »</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#7C3AED,#EC4899)">FD</div>
+          <div>
+            <div class="testi-name">Fatoumata Diallo</div>
+            <div class="testi-loc">Étudiante — Conakry</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+        </div>
+        <p class="testi-text">« J'utilise ma carte Raminta pour acheter sur Amazon et payer des outils comme Canva et ChatGPT Plus pour mon agence digitale. C'est la meilleure solution que j'ai trouvée en Guinée. Très professionnel. »</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">AK</div>
+          <div>
+            <div class="testi-name">Aboubacar Keïta</div>
+            <div class="testi-loc">Entrepreneur digital — Labé</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="testi-text">« J'ai utilisé ma carte pour réserver un hôtel sur Booking.com lors d'un voyage professionnel. Aucun problème, tout s'est passé sans accroc. La recharge via Orange Money est super pratique. Merci Raminta ! »</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#059669,#0284C7)">SC</div>
+          <div>
+            <div class="testi-name">Saran Camara</div>
+            <div class="testi-loc">Responsable RH — Kankan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="section-header fade">
+      <div class="section-tag">Questions fréquentes</div>
+      <h2 class="section-title">Vous avez des questions ?</h2>
+      <p class="section-sub">Trouvez rapidement les réponses aux questions les plus posées sur nos cartes Visa prépayées.</p>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq-item fade">
+        <button class="faq-q" type="button">
+          Combien de temps faut-il pour obtenir la carte ?
+          <span class="faq-icon"><i class="fas fa-plus"></i></span>
+        </button>
+        <div class="faq-body"><div class="faq-body-inner">Après validation de votre dossier et réception du paiement des frais, votre carte Visa prépayée est activée sous <strong>48 heures ouvrées</strong>. Vous recevrez vos identifiants par SMS et email. Dans certains cas, le délai peut être réduit à 24h.</div></div>
+      </div>
+      <div class="faq-item fade">
+        <button class="faq-q" type="button">
+          Puis-je payer sur tous les sites internationaux ?
+          <span class="faq-icon"><i class="fas fa-plus"></i></span>
+        </button>
+        <div class="faq-body"><div class="faq-body-inner">Oui ! Votre carte Visa prépayée est acceptée sur pratiquement tous les sites de commerce en ligne et plateformes internationales : Amazon, Alibaba, Netflix, Spotify, Facebook Ads, Google Ads, Booking, Airbnb, ChatGPT Plus, Canva et bien d'autres. Partout où Visa est accepté, votre carte fonctionne.</div></div>
+      </div>
+      <div class="faq-item fade">
+        <button class="faq-q" type="button">
+          Puis-je retirer de l'argent dans un GAB ?
+          <span class="faq-icon"><i class="fas fa-plus"></i></span>
+        </button>
+        <div class="faq-body"><div class="faq-body-inner">Oui, vous pouvez retirer des espèces aux distributeurs automatiques de billets (GAB) qui acceptent Visa, en Guinée et à l'international. Des frais de retrait peuvent s'appliquer selon le montant et le réseau utilisé. Renseignez-vous auprès de notre équipe pour connaître les conditions.</div></div>
+      </div>
+      <div class="faq-item fade">
+        <button class="faq-q" type="button">
+          Comment recharger ma carte ?
+          <span class="faq-icon"><i class="fas fa-plus"></i></span>
+        </button>
+        <div class="faq-body"><div class="faq-body-inner">La recharge de votre carte est simple et rapide. Vous pouvez recharger via <strong>Orange Money</strong>, <strong>MTN Mobile Money</strong> ou en espèces à notre bureau de Conakry. Une fois la recharge effectuée, le solde est crédité sur votre carte en quelques minutes. Contactez notre équipe WhatsApp pour initier une recharge.</div></div>
+      </div>
+      <div class="faq-item fade">
+        <button class="faq-q" type="button">
+          La carte fonctionne-t-elle hors de la Guinée ?
+          <span class="faq-icon"><i class="fas fa-plus"></i></span>
+        </button>
+        <div class="faq-body"><div class="faq-body-inner">Absolument. Votre carte Visa prépayée est internationale et fonctionne dans plus de 150 pays. Que vous voyagiez pour le travail ou les études, vous pouvez l'utiliser pour payer vos achats, réserver des hôtels, louer des voitures et effectuer tous vos paiements à l'étranger.</div></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:44px">
+      <p style="color:var(--gray-600);font-size:15px;margin-bottom:16px">Vous n'avez pas trouvé votre réponse ?</p>
+      <a href="https://wa.me/224XXXXXXXXX?text=Bonjour%2C%20j%27ai%20une%20question%20sur%20la%20carte%20Visa%20Raminta." target="_blank" rel="noopener" class="btn-primary" style="display:inline-flex">
+        <i class="fab fa-whatsapp"></i>
+        Posez votre question sur WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECURITY ── -->
+<section class="security-section">
+  <div class="container">
+    <div class="section-header fade">
+      <div class="section-tag dark-tag">Confiance & Sécurité</div>
+      <h2 class="section-title dark-title">Votre sécurité est notre priorité</h2>
+      <p class="section-sub dark-sub">Raminta Business applique les standards les plus élevés pour protéger vos données et vos transactions.</p>
+    </div>
+    <div class="security-grid">
+      <div class="sec-item fade">
+        <div class="sec-icon"><i class="fas fa-lock"></i></div>
+        <div>
+          <div class="sec-title">Transactions sécurisées</div>
+          <div class="sec-desc">Chaque transaction est chiffrée et protégée par le protocole de sécurité Visa 3D Secure pour vous éviter toute fraude.</div>
+        </div>
+      </div>
+      <div class="sec-item fade">
+        <div class="sec-icon"><i class="fas fa-user-shield"></i></div>
+        <div>
+          <div class="sec-title">Protection des données</div>
+          <div class="sec-desc">Vos informations personnelles sont stockées de manière sécurisée et ne sont jamais partagées avec des tiers sans votre consentement.</div>
+        </div>
+      </div>
+      <div class="sec-item fade">
+        <div class="sec-icon"><i class="fas fa-headset"></i></div>
+        <div>
+          <div class="sec-title">Assistance clientèle</div>
+          <div class="sec-desc">Notre équipe dédiée est disponible 7j/7 pour répondre à vos questions et résoudre tout problème lié à votre carte.</div>
+        </div>
+      </div>
+      <div class="sec-item fade">
+        <div class="sec-icon"><i class="fas fa-check-double"></i></div>
+        <div>
+          <div class="sec-title">Service fiable</div>
+          <div class="sec-desc">Des centaines de clients satisfaits en Guinée font confiance à Raminta Business pour leurs besoins de paiement international.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA SECTION ── -->
+<section style="background:linear-gradient(135deg,#00C896,#00A87A);padding:80px 20px;text-align:center">
+  <div class="container fade">
+    <h2 style="font-size:clamp(28px,4vw,44px);font-weight:900;color:white;margin-bottom:14px;letter-spacing:-.5px">Prêt à obtenir votre carte Visa ?</h2>
+    <p style="font-size:17px;color:rgba(255,255,255,.8);margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto">Rejoignez des centaines de Guinéens qui profitent déjà des avantages d'une carte Visa prépayée internationale.</p>
+    <a href="#commander" class="btn-primary" style="background:white;color:var(--accent-dark);box-shadow:0 8px 30px rgba(0,0,0,.2);display:inline-flex;font-size:16px">
+      <i class="fas fa-credit-card"></i>
+      Commander ma carte maintenant
+    </a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">Raminta<span>Business</span></a>
+      <p class="footer-tagline">Transformez vos idées en réalité.<br>La solution de paiement international des Guinéens ambitieux.</p>
+      <div class="footer-contact">
+        <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i> Conakry, Guinée</div>
+        <div class="footer-contact-item"><i class="fas fa-phone"></i> +224 XX XX XX XX</div>
+        <div class="footer-contact-item"><i class="fas fa-envelope"></i> contact@ramintaguinee.com</div>
+        <div class="footer-contact-item"><i class="fas fa-globe"></i> business.ramintaguinee.com</div>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="soc-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="soc-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="soc-link" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="soc-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-head">Services</div>
+      <ul class="footer-links">
+        <li><a href="#commander">Commander une carte</a></li>
+        <li><a href="#utilisation">Où utiliser la carte</a></li>
+        <li><a href="#comment">Comment ça marche</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-head">Support</div>
+      <ul class="footer-links">
+        <li><a href="#faq">Questions fréquentes</a></li>
+        <li><a href="https://wa.me/224XXXXXXXXX" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="#temoignages">Témoignages</a></li>
+        <li><a href="mailto:contact@ramintaguinee.com">Email</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-head">Légal</div>
+      <ul class="footer-links">
+        <li><a href="#">Conditions d'utilisation</a></li>
+        <li><a href="#">Politique de confidentialité</a></li>
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Politique de remboursement</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Raminta Business — Raminta Guinée. Tous droits réservés.</div>
+    <div class="footer-visa-badge">
+      <i class="fas fa-credit-card" style="color:var(--accent)"></i>
+      Carte Visa Prépayée Internationale
+    </div>
+  </div>
+</footer>
+
+<!-- ── FLOATING BUTTONS ── -->
+<a class="float-wa" href="https://wa.me/224XXXXXXXXX?text=Bonjour%20Raminta%20Business%2C%20je%20souhaite%20obtenir%20une%20carte%20Visa%20prépayée." target="_blank" rel="noopener" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+<button class="float-top" id="scrollTop" aria-label="Retour en haut" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fas fa-arrow-up"></i>
+</button>
 
 <script>
-  const rules = {
-    prenom:   v => v.length >= 2,
-    nom:      v => v.length >= 2,
-    dob:      v => v !== '',
-    idType:   v => v !== '',
-    idNumber: v => v.length >= 3,
-    phone:    v => v.replace(/\s/g,'').length >= 8,
-    email:    v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
-  };
+  // ── Intersection Observer for fade-in ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade, .fade-l, .fade-r').forEach(el => {
+    if (!el.classList.contains('in')) observer.observe(el);
+  });
 
-  function check(id) {
-    const el = document.getElementById(id);
-    const ok = rules[id](el.value.trim());
-    el.classList.toggle('err-field', !ok);
-    document.getElementById('e-' + id).classList.toggle('show', !ok);
-    return ok;
+  // ── Scroll: back-to-top button ──
+  const topBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    topBtn.classList.toggle('vis', window.scrollY > 400);
+  });
+
+  // ── FAQ accordion ──
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // ── Form validation & WhatsApp redirect ──
+  const form = document.getElementById('orderForm');
+  const WA_NUMBER = '224XXXXXXXXX'; // ← Remplacez par votre numéro WhatsApp
+
+  function setFieldState(id, valid) {
+    const input = document.getElementById(id);
+    const err = document.getElementById('e-' + id);
+    if (!input) return;
+    input.classList.toggle('err', !valid);
+    input.classList.toggle('ok', valid);
+    if (err) err.classList.toggle('show', !valid);
   }
 
-  Object.keys(rules).forEach(id => {
-    document.getElementById(id).addEventListener('blur', () => check(id));
+  function validateField(id, condition) {
+    setFieldState(id, condition);
+    return condition;
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const fullName = document.getElementById('fullName').value.trim();
+    const phone    = document.getElementById('phone').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const city     = document.getElementById('city').value;
+    const idNumber = document.getElementById('idNumber').value.trim();
+    const amount   = document.getElementById('amount').value;
+    const confirm  = document.getElementById('confirm').checked;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const v = [
+      validateField('fullName', fullName.length >= 3),
+      validateField('phone',    phone.length >= 8),
+      validateField('email',    emailRegex.test(email)),
+      validateField('city',     city !== ''),
+      validateField('idNumber', idNumber.length >= 4),
+      validateField('amount',   amount !== ''),
+    ];
+
+    const confirmErr = document.getElementById('e-confirm');
+    if (!confirm) confirmErr.classList.add('show');
+    else confirmErr.classList.remove('show');
+
+    if (v.every(Boolean) && confirm) {
+      // Build WhatsApp message
+      const msg = encodeURIComponent(
+        `🏦 *Nouvelle commande – Carte Visa Raminta Business*\n\n` +
+        `👤 *Nom complet :* ${fullName}\n` +
+        `📞 *Téléphone :* ${phone}\n` +
+        `📧 *Email :* ${email}\n` +
+        `📍 *Ville :* ${city}\n` +
+        `🪪 *Pièce d'identité :* ${idNumber}\n` +
+        `💰 *Montant de recharge :* ${amount}\n\n` +
+        `_Formulaire soumis via business.ramintaguinee.com_`
+      );
+
+      // Show success message
+      document.getElementById('successBox').classList.add('show');
+      form.style.display = 'none';
+
+      // Open WhatsApp
+      setTimeout(() => {
+        window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
+      }, 800);
+    }
   });
 
-  document.getElementById('orderForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const valid = Object.keys(rules).map(check).every(Boolean);
-    if (!valid) return;
-
-    const g = id => document.getElementById(id).value.trim();
-    const btn = document.querySelector('.btn-submit');
-    btn.disabled = true;
-    btn.textContent = 'Envoi en cours…';
-
-    try {
-      const res = await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prenom:   g('prenom'),
-          nom:      g('nom'),
-          dob:      g('dob'),
-          idType:   g('idType'),
-          idNumber: g('idNumber'),
-          phone:    g('phone'),
-          email:    g('email'),
-        }),
-      });
-
-      if (!res.ok) throw new Error();
-    } catch {
-      btn.disabled = false;
-      btn.textContent = 'Commander ma carte Visa';
-      alert('Erreur lors de l\'envoi. Veuillez réessayer.');
-      return;
-    }
-
-    document.getElementById('orderForm').style.display = 'none';
-    document.getElementById('success').classList.add('show');
-
+  // Real-time validation on blur
+  ['fullName','phone','email','city','idNumber','amount'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('blur', () => {
+      const v = el.value.trim();
+      if (id === 'email') setFieldState(id, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+      else if (id === 'fullName') setFieldState(id, v.length >= 3);
+      else if (id === 'phone') setFieldState(id, v.length >= 8);
+      else setFieldState(id, v !== '');
+    });
   });
 </script>
-
 </body>
 </html>
