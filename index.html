@@ -428,8 +428,6 @@
 </div>
 
 <script>
-  const WA = '224622269738';
-
   const rules = {
     prenom:   v => v.length >= 2,
     nom:      v => v.length >= 2,
@@ -441,8 +439,8 @@
   };
 
   function check(id) {
-    const el  = document.getElementById(id);
-    const ok  = rules[id](el.value.trim());
+    const el = document.getElementById(id);
+    const ok = rules[id](el.value.trim());
     el.classList.toggle('err-field', !ok);
     document.getElementById('e-' + id).classList.toggle('show', !ok);
     return ok;
@@ -452,30 +450,42 @@
     document.getElementById(id).addEventListener('blur', () => check(id));
   });
 
-  document.getElementById('orderForm').addEventListener('submit', e => {
+  document.getElementById('orderForm').addEventListener('submit', async e => {
     e.preventDefault();
     const valid = Object.keys(rules).map(check).every(Boolean);
     if (!valid) return;
 
     const g = id => document.getElementById(id).value.trim();
+    const btn = document.querySelector('.btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours…';
 
-    const msg = encodeURIComponent(
-      `🏦 *Demande de carte Visa prépayée – Raminta Guinée*\n\n` +
-      `👤 *Prénom :* ${g('prenom')}\n` +
-      `👤 *Nom :* ${g('nom')}\n` +
-      `🎂 *Date de naissance :* ${g('dob')}\n` +
-      `🪪 *Pièce d'identité :* ${g('idType')}\n` +
-      `🔢 *Numéro pièce :* ${g('idNumber')}\n` +
-      `📞 *Téléphone :* ${g('phone')}\n` +
-      `📧 *E-mail :* ${g('email')}`
-    );
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prenom:   g('prenom'),
+          nom:      g('nom'),
+          dob:      g('dob'),
+          idType:   g('idType'),
+          idNumber: g('idNumber'),
+          phone:    g('phone'),
+          email:    g('email'),
+        }),
+      });
+
+      if (!res.ok) throw new Error();
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Commander ma carte Visa';
+      alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+      return;
+    }
 
     document.getElementById('orderForm').style.display = 'none';
     document.getElementById('success').classList.add('show');
 
-    setTimeout(() => {
-      window.open(`https://wa.me/${WA}?text=${msg}`, '_blank');
-    }, 700);
   });
 </script>
 
