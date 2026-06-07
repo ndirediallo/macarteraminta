@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Raminta Guinée</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brand: #2D3192;
+      --brand-l: #eef0fc;
+      --green: #16A34A;
+      --red: #DC2626;
+      --text: #111827;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+      --bg: #F4F5FB;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 30px rgba(45,49,146,0.1);
+    }
+
+    .login-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .login-logo img { height: 52px; width: auto; object-fit: contain; }
+
+    .login-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--brand);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .fl {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 6px;
+    }
+
+    .fi {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #FAFAFA;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      margin-bottom: 16px;
+    }
+
+    .fi:focus { border-color: var(--brand); background: #fff; box-shadow: 0 0 0 3px rgba(45,49,146,.1); }
+    .fi.err   { border-color: var(--red); background: #fff5f5; }
+
+    .login-err {
+      font-size: 13px;
+      color: var(--red);
+      text-align: center;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .login-err.show { display: block; }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .btn:hover { background: #222880; transform: translateY(-1px); }
+
+    /* ── DASHBOARD ── */
+    .dashboard { display: none; }
+    .dashboard.show { display: block; }
+
+    .topbar {
+      background: var(--brand);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+    }
+
+    .topbar-logo { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo img { height: 36px; object-fit: contain; filter: brightness(0) invert(1); }
+    .topbar-title { font-size: 15px; font-weight: 700; color: white; }
+
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-user { font-size: 13px; color: rgba(255,255,255,.7); }
+
+    .btn-logout {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,.25); }
+
+    .main-content { padding: 32px 28px; max-width: 1200px; margin: 0 auto; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px 24px;
+      box-shadow: 0 1px 10px rgba(0,0,0,.05);
+    }
+
+    .stat-label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 800; color: var(--brand); }
+    .stat-sub   { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-title { font-size: 17px; font-weight: 800; color: var(--text); }
+
+    .btn-csv {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-csv:hover { background: #15803D; }
+
+    .btn-refresh {
+      background: var(--brand-l);
+      color: var(--brand);
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-refresh:hover { background: #dde0f7; }
+
+    .table-wrap {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 1px 10px rgba(0,0,0,.05);
+      overflow: hidden;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 48px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 24px; height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin-bottom: 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--muted);
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty p { font-size: 15px; }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead { background: var(--bg); border-bottom: 2px solid var(--border); }
+    th {
+      padding: 13px 16px;
+      text-align: left;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      white-space: nowrap;
+    }
+
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg); }
+
+    td {
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .td-name { font-weight: 700; color: var(--brand); }
+    .td-date { color: var(--muted); font-size: 13px; }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--brand-l);
+      color: var(--brand);
+    }
+
+    .row-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--brand-l);
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+      .main-content { padding: 20px 16px; }
+      .topbar { padding: 0 16px; }
+      table { font-size: 13px; }
+      th, td { padding: 11px 12px; }
+      .login-card { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="Logo Raminta.png" alt="Raminta" onerror="this.style.display='none'">
+    </div>
+    <div class="login-title">Espace Administrateur</div>
+    <p class="login-sub">Accès réservé à l'équipe Raminta</p>
+
+    <div class="login-err" id="loginErr">Identifiants incorrects.</div>
+
+    <form id="loginForm" novalidate>
+      <label class="fl" for="usr">Nom d'utilisateur</label>
+      <input class="fi" type="text" id="usr" placeholder="raminta" autocomplete="username">
+
+      <label class="fl" for="pwd">Mot de passe</label>
+      <input class="fi" type="password" id="pwd" placeholder="••••" autocomplete="current-password">
+
+      <button type="submit" class="btn">Se connecter</button>
+    </form>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div class="dashboard" id="dashboard">
+
+  <div class="topbar">
+    <div class="topbar-logo">
+      <img src="Logo Raminta.png" alt="Raminta" onerror="this.style.display='none'">
+      <span class="topbar-title">Administration</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-user">raminta</span>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total commandes</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-sub">depuis le début</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Aujourd'hui</div>
+        <div class="stat-value" id="statToday">—</div>
+        <div class="stat-sub">nouvelles commandes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cette semaine</div>
+        <div class="stat-value" id="statWeek">—</div>
+        <div class="stat-sub">commandes</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">Commandes reçues</span>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-refresh" onclick="loadData()" id="btnRefresh">↻ Actualiser</button>
+        <button class="btn-csv" onclick="exportCSV()">⬇ Exporter CSV</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="loading" id="loadingState">
+        <div class="spinner"></div><br>Chargement des données…
+      </div>
+      <div class="empty" id="emptyState" style="display:none">
+        <div class="empty-icon">📭</div>
+        <p>Aucune commande pour l'instant.</p>
+      </div>
+      <div id="tableContainer" style="display:none; overflow-x:auto">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Nom complet</th>
+              <th>Naissance</th>
+              <th>Pièce d'identité</th>
+              <th>Téléphone</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let allData = [];
+
+  /* ── AUTH ── */
+  document.getElementById('loginForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const usr = document.getElementById('usr').value.trim();
+    const pwd = document.getElementById('pwd').value.trim();
+    const err = document.getElementById('loginErr');
+
+    if (usr === 'raminta' && pwd === '2025') {
+      sessionStorage.setItem('admin', '1');
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('dashboard').classList.add('show');
+      loadData();
+    } else {
+      err.classList.add('show');
+      document.getElementById('usr').classList.add('err');
+      document.getElementById('pwd').classList.add('err');
+    }
+  });
+
+  function logout() {
+    sessionStorage.removeItem('admin');
+    location.reload();
+  }
+
+  if (sessionStorage.getItem('admin') === '1') {
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('dashboard').classList.add('show');
+    loadData();
+  }
+
+  /* ── DATA ── */
+  async function loadData() {
+    const btn = document.getElementById('btnRefresh');
+    btn.disabled = true;
+    btn.textContent = '↻ Chargement…';
+    document.getElementById('loadingState').style.display  = 'block';
+    document.getElementById('emptyState').style.display    = 'none';
+    document.getElementById('tableContainer').style.display = 'none';
+
+    try {
+      const res = await fetch('/api/submissions?pwd=2025');
+      allData = await res.json();
+
+      if (!Array.isArray(allData) || allData.length === 0) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('emptyState').style.display   = 'block';
+        updateStats([]);
+      } else {
+        renderTable(allData);
+        updateStats(allData);
+      }
+    } catch {
+      document.getElementById('loadingState').innerHTML = '<p style="color:#DC2626">Erreur de chargement. Vérifiez votre connexion.</p>';
+    }
+
+    btn.disabled = false;
+    btn.textContent = '↻ Actualiser';
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = data.map((d, i) => `
+      <tr>
+        <td><div class="row-num">${i + 1}</div></td>
+        <td class="td-date">${d.date || '—'}</td>
+        <td class="td-name">${esc(d.prenom)} ${esc(d.nom)}</td>
+        <td>${d.dob || '—'}</td>
+        <td><span class="badge">${esc(d.idType || '—')}</span><br>
+            <span style="font-size:12px;color:#6B7280">${esc(d.idNumber || '')}</span></td>
+        <td>${esc(d.phone || '—')}</td>
+        <td>${esc(d.email || '—')}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('loadingState').style.display    = 'none';
+    document.getElementById('tableContainer').style.display  = 'block';
+  }
+
+  function updateStats(data) {
+    document.getElementById('statTotal').textContent = data.length;
+
+    const today = new Date().toLocaleDateString('fr-FR');
+    const todayCount = data.filter(d => (d.date || '').startsWith(today.split('/').reverse().join('/')));
+    document.getElementById('statToday').textContent = todayCount.length;
+
+    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+    document.getElementById('statWeek').textContent = data.length; // all for now
+  }
+
+  /* ── CSV EXPORT ── */
+  function exportCSV() {
+    if (!allData.length) return alert('Aucune donnée à exporter.');
+
+    const headers = ['Date', 'Prénom', 'Nom', 'Date naissance', 'Type ID', 'N° ID', 'Téléphone', 'Email'];
+    const rows = allData.map(d => [
+      d.date, d.prenom, d.nom, d.dob, d.idType, d.idNumber, d.phone, d.email
+    ].map(v => `"${(v || '').replace(/"/g, '""')}"`).join(','));
+
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = `commandes-raminta-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>
+
+</body>
+</html>
