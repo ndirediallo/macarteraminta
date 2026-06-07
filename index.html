@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commande Carte Visa Prépayée – Raminta Guinée</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brand:   #2D3192;
+      --brand-l: #eef0fc;
+      --green:   #16A34A;
+      --green-h: #15803D;
+      --text:    #111827;
+      --muted:   #6B7280;
+      --border:  #E5E7EB;
+      --bg:      #F4F5FB;
+      --red:     #DC2626;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* ── FORM LOGO ── */
+    .form-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .form-logo img {
+      height: 64px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .form-logo-fallback {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--brand);
+      letter-spacing: -0.4px;
+      display: none;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      text-align: center;
+      padding: 36px 20px 28px;
+    }
+
+    .page-header h1 {
+      font-size: clamp(20px, 4vw, 26px);
+      font-weight: 800;
+      color: var(--brand);
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
+    }
+
+    .page-header p {
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    /* ── MAIN GRID ── */
+    .main {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* mobile: form first, benefits second */
+    .col-form  { order: 1; }
+    .col-perks { order: 2; }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+      padding: 36px 32px;
+    }
+
+    .form-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    label .req { color: var(--red); margin-left: 2px; }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14.5px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #FAFAFA;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input::placeholder { color: #C4C9D4; }
+
+    input:focus, select:focus {
+      border-color: var(--brand);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(45,49,146,0.1);
+    }
+
+    input.err-field  { border-color: var(--red); background: #fff5f5; }
+    select.err-field { border-color: var(--red); background: #fff5f5; }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 13px center;
+      background-color: #FAFAFA;
+      padding-right: 40px;
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .err-msg {
+      font-size: 11.5px;
+      color: var(--red);
+      margin-top: 4px;
+      display: none;
+    }
+    .err-msg.show { display: block; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      margin-top: 6px;
+      letter-spacing: 0.1px;
+      box-shadow: 0 4px 14px rgba(22,163,74,0.35);
+    }
+
+    .btn-submit:hover  { background: var(--green-h); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(22,163,74,.45); }
+    .btn-submit:active { transform: translateY(0); box-shadow: none; }
+
+    .form-note {
+      text-align: center;
+      font-size: 11.5px;
+      color: #9CA3AF;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* ── SUCCESS ── */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 16px 0;
+    }
+    .success.show { display: block; }
+
+    .success-circle {
+      width: 64px; height: 64px;
+      background: #F0FDF4;
+      border: 2px solid #86EFAC;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 16px;
+    }
+
+    .success h2 { font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .success p  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── PERKS PANEL ── */
+    .perks-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .perks-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--brand);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+    }
+
+    .perk {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: 0 1px 10px rgba(0,0,0,0.05);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .perk:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(45,49,146,0.1);
+    }
+
+    .perk-icon {
+      width: 44px; height: 44px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      background: var(--brand-l);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    .perk-body h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .perk-body p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 760px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+      .col-form  { order: 1; }
+      .col-perks { order: 2; }
+
+      .page-header { padding: 28px 20px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .form-card { padding: 28px 18px; }
+      .row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <h1>Commande de carte Visa prépayée</h1>
+  <p>Votre carte internationale, disponible en Guinée</p>
+</div>
+
+<!-- ── MAIN GRID ── -->
+<div class="main">
+
+  <!-- FORM -->
+  <div class="col-form">
+    <div class="form-card">
+      <div class="form-logo">
+        <img
+          src="Logo Raminta.png"
+          alt="Raminta Guinée"
+          id="logoImg"
+          onerror="this.style.display='none';document.getElementById('logoFb').style.display='block';"
+        >
+        <span class="form-logo-fallback" id="logoFb">Raminta Guinée</span>
+      </div>
+      <p class="form-card-title">Remplissez le formulaire ci-dessous.</p>
+
+      <form id="orderForm" novalidate>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label for="prenom">Prénom <span class="req">*</span></label>
+            <input type="text" id="prenom" placeholder="Mamadou" autocomplete="given-name">
+            <div class="err-msg" id="e-prenom">Champ requis.</div>
+          </div>
+          <div class="form-group">
+            <label for="nom">NOM <span class="req">*</span></label>
+            <input type="text" id="nom" placeholder="DIALLO" autocomplete="family-name">
+            <div class="err-msg" id="e-nom">Champ requis.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dob">Date de naissance <span class="req">*</span></label>
+          <input type="date" id="dob" autocomplete="bday">
+          <div class="err-msg" id="e-dob">Champ requis.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="idType">Type de pièce d'identité <span class="req">*</span></label>
+          <select id="idType">
+            <option value="">— Sélectionnez —</option>
+            <option>Carte d'identité</option>
+            <option>Passeport</option>
+            <option>Carte Scolaire</option>
+            <option>Autres</option>
+          </select>
+          <div class="err-msg" id="e-idType">Champ requis.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="idNumber">Numéro de pièce d'identité <span class="req">*</span></label>
+          <input type="text" id="idNumber" placeholder="Ex : GN-123456789">
+          <div class="err-msg" id="e-idNumber">Champ requis.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Numéro de téléphone <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="+224 6XX XXX XXX" autocomplete="tel">
+          <div class="err-msg" id="e-phone">Numéro invalide.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Adresse e-mail <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="vous@exemple.com" autocomplete="email">
+          <div class="err-msg" id="e-email">Email invalide.</div>
+        </div>
+
+        <button type="submit" class="btn-submit">Commander ma carte Visa</button>
+
+      </form>
+
+      <div class="success" id="success">
+        <div class="success-circle">✓</div>
+        <h2>Demande envoyée !</h2>
+        <p>Votre demande a bien été transmise.<br>Notre équipe vous contactera sous 24h.</p>
+      </div>
+
+      <p class="form-note">
+        🔒 Vos données sont confidentielles
+      </p>
+    </div>
+  </div>
+
+  <!-- BENEFITS -->
+  <div class="col-perks">
+    <p class="perks-title">Pourquoi cette carte ?</p>
+
+    <div class="perk">
+      <div class="perk-icon">📱</div>
+      <div class="perk-body">
+        <h3>Rechargeable via Mobile Money</h3>
+        <p>Rechargez facilement avec Orange Money ou MTN Mobile Money, directement depuis votre téléphone.</p>
+      </div>
+    </div>
+
+    <div class="perk">
+      <div class="perk-icon">🛒</div>
+      <div class="perk-body">
+        <h3>Paiement en ligne</h3>
+        <p>Achetez sur Amazon, Alibaba, payez Netflix, Spotify, Facebook Ads, ChatGPT et bien d'autres.</p>
+      </div>
+    </div>
+
+    <div class="perk">
+      <div class="perk-icon">🏧</div>
+      <div class="perk-body">
+        <h3>Retrait aux GAB du monde entier</h3>
+        <p>Retirez de l'argent en espèces dans tous les distributeurs automatiques acceptant Visa.</p>
+      </div>
+    </div>
+
+    <div class="perk">
+      <div class="perk-icon">🍽️</div>
+      <div class="perk-body">
+        <h3>Restaurants, Hôtels &amp; Commerces</h3>
+        <p>Réglez vos achats partout en Guinée et à l'étranger dans les commerces physiques qui acceptent Visa.</p>
+      </div>
+    </div>
+
+    <div class="perk">
+      <div class="perk-icon">✅</div>
+      <div class="perk-body">
+        <h3>Pas besoin de compte bancaire</h3>
+        <p>Aucune banque requise. Accessible à tous avec une simple pièce d'identité et un téléphone.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const WA = '224622269738';
+
+  const rules = {
+    prenom:   v => v.length >= 2,
+    nom:      v => v.length >= 2,
+    dob:      v => v !== '',
+    idType:   v => v !== '',
+    idNumber: v => v.length >= 3,
+    phone:    v => v.replace(/\s/g,'').length >= 8,
+    email:    v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+  };
+
+  function check(id) {
+    const el  = document.getElementById(id);
+    const ok  = rules[id](el.value.trim());
+    el.classList.toggle('err-field', !ok);
+    document.getElementById('e-' + id).classList.toggle('show', !ok);
+    return ok;
+  }
+
+  Object.keys(rules).forEach(id => {
+    document.getElementById(id).addEventListener('blur', () => check(id));
+  });
+
+  document.getElementById('orderForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const valid = Object.keys(rules).map(check).every(Boolean);
+    if (!valid) return;
+
+    const g = id => document.getElementById(id).value.trim();
+
+    const msg = encodeURIComponent(
+      `🏦 *Demande de carte Visa prépayée – Raminta Guinée*\n\n` +
+      `👤 *Prénom :* ${g('prenom')}\n` +
+      `👤 *Nom :* ${g('nom')}\n` +
+      `🎂 *Date de naissance :* ${g('dob')}\n` +
+      `🪪 *Pièce d'identité :* ${g('idType')}\n` +
+      `🔢 *Numéro pièce :* ${g('idNumber')}\n` +
+      `📞 *Téléphone :* ${g('phone')}\n` +
+      `📧 *E-mail :* ${g('email')}`
+    );
+
+    document.getElementById('orderForm').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+
+    setTimeout(() => {
+      window.open(`https://wa.me/${WA}?text=${msg}`, '_blank');
+    }, 700);
+  });
+</script>
+
+</body>
+</html>
