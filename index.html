@@ -151,6 +151,17 @@
       gap: 14px;
     }
 
+    .row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.4fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 400px) {
+      .row-3 { grid-template-columns: 1fr 1fr; }
+      .row-3 select:last-child { grid-column: 1 / -1; }
+    }
+
     .err-msg {
       font-size: 11.5px;
       color: var(--red);
@@ -323,8 +334,13 @@
         </div>
 
         <div class="form-group">
-          <label for="dob">Date de naissance <span class="req">*</span></label>
-          <input type="date" id="dob" autocomplete="bday">
+          <label>Date de naissance <span class="req">*</span></label>
+          <div class="row-3">
+            <select id="dob-day" onchange="updateDob()"><option value="">Jour</option></select>
+            <select id="dob-month" onchange="updateDob()"><option value="">Mois</option></select>
+            <select id="dob-year" onchange="updateDob()"><option value="">Année</option></select>
+          </div>
+          <input type="hidden" id="dob">
           <div class="err-msg" id="e-dob">Champ requis.</div>
         </div>
 
@@ -365,7 +381,10 @@
       <div class="success" id="success">
         <div class="success-circle">✓</div>
         <h2>Demande envoyée !</h2>
-        <p>Votre demande a bien été transmise.<br>Notre équipe vous contactera sous 24h.</p>
+        <p>Votre commande a bien été transmise.<br>Notre équipe vous contactera dans un instant.</p>
+        <button onclick="resetForm()" style="margin-top:20px;padding:11px 28px;background:var(--brand);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:background .2s;">
+          Nouvelle commande
+        </button>
       </div>
 
       <p class="form-note">
@@ -389,6 +408,14 @@
   };
 
   function check(id) {
+    if (id === 'dob') {
+      const ok = document.getElementById('dob').value !== '';
+      ['dob-day','dob-month','dob-year'].forEach(s => {
+        document.getElementById(s).classList.toggle('err-field', !ok);
+      });
+      document.getElementById('e-dob').classList.toggle('show', !ok);
+      return ok;
+    }
     const el = document.getElementById(id);
     const ok = rules[id](el.value.trim());
     el.classList.toggle('err-field', !ok);
@@ -396,8 +423,46 @@
     return ok;
   }
 
-  Object.keys(rules).forEach(id => {
+  function updateDob() {
+    const d = document.getElementById('dob-day').value;
+    const m = document.getElementById('dob-month').value;
+    const y = document.getElementById('dob-year').value;
+    document.getElementById('dob').value = (d && m && y) ? `${d}/${m}/${y}` : '';
+    check('dob');
+  }
+
+  // Populate DOB selects
+  (function() {
+    const dayEl = document.getElementById('dob-day');
+    for (let d = 1; d <= 31; d++) {
+      const o = document.createElement('option');
+      o.value = String(d).padStart(2,'0');
+      o.textContent = d;
+      dayEl.appendChild(o);
+    }
+    const months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+    const monthEl = document.getElementById('dob-month');
+    months.forEach((m, i) => {
+      const o = document.createElement('option');
+      o.value = String(i+1).padStart(2,'0');
+      o.textContent = m;
+      monthEl.appendChild(o);
+    });
+    const yearEl = document.getElementById('dob-year');
+    const curYear = new Date().getFullYear();
+    for (let y = curYear - 16; y >= 1940; y--) {
+      const o = document.createElement('option');
+      o.value = y;
+      o.textContent = y;
+      yearEl.appendChild(o);
+    }
+  })();
+
+  Object.keys(rules).filter(id => id !== 'dob').forEach(id => {
     document.getElementById(id).addEventListener('blur', () => check(id));
+  });
+  ['dob-day','dob-month','dob-year'].forEach(s => {
+    document.getElementById(s).addEventListener('blur', () => check('dob'));
   });
 
   document.getElementById('orderForm').addEventListener('submit', async e => {
@@ -434,9 +499,30 @@
     }
 
     document.getElementById('orderForm').style.display = 'none';
+    document.querySelector('.form-card-title').style.display = 'none';
     document.getElementById('success').classList.add('show');
 
   });
+
+  function resetForm() {
+    document.getElementById('orderForm').reset();
+    document.getElementById('dob').value = '';
+    document.getElementById('orderForm').style.display = 'block';
+    document.querySelector('.form-card-title').style.display = 'block';
+    document.getElementById('success').classList.remove('show');
+    Object.keys(rules).forEach(id => {
+      if (id === 'dob') {
+        ['dob-day','dob-month','dob-year'].forEach(s => document.getElementById(s).classList.remove('err-field'));
+        document.getElementById('e-dob').classList.remove('show');
+        return;
+      }
+      const el = document.getElementById(id);
+      el.classList.remove('err-field');
+      document.getElementById('e-' + id).classList.remove('show');
+    });
+    document.querySelector('.btn-submit').disabled = false;
+    document.querySelector('.btn-submit').textContent = 'Commander ma carte Visa';
+  }
 </script>
 
 </body>
