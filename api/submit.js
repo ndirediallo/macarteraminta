@@ -45,6 +45,18 @@ export default async function handler(req, res) {
     const putRes = await fetch(API, { method: 'PUT', headers: HEADERS, body: JSON.stringify(body) });
     if (!putRes.ok) throw new Error(await putRes.text());
 
+    // Notification WhatsApp CallMeBot
+    try {
+      const msg = encodeURIComponent(
+        `🔔 Nouvelle commande Raminta !\n` +
+        `👤 ${prenom} ${nom}\n` +
+        `📞 ${phone}\n` +
+        `✉️ ${email}\n` +
+        `🪪 ${idType} – ${idNumber}`
+      );
+      await fetch(`https://api.callmebot.com/whatsapp.php?phone=224622269738&text=${msg}&apikey=2895723`);
+    } catch (_) {}
+
     return res.status(200).json({ success: true });
   } catch (err) {
     console.error(err);
