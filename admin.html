@@ -349,6 +349,28 @@
     .dot-green  { background: var(--green); }
     .dot-gray   { background: var(--muted); }
 
+    /* ── DELETE BUTTON ── */
+    .btn-delete {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: #FEF2F2;
+      border: 1.5px solid #FECACA;
+      color: var(--red);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+    .btn-delete:hover {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+    .btn-delete:disabled { opacity: .4; pointer-events: none; }
+
     /* ── FILTER BAR ── */
     .filter-bar {
       background: #fff;
@@ -682,6 +704,7 @@
               <th>Téléphone</th>
               <th>Email</th>
               <th>Statut</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -776,6 +799,9 @@
             <span class="dot ${isActive ? 'dot-green' : 'dot-gray'}"></span>
             ${isActive ? 'Activé' : 'Non activé'}
           </button>
+        </td>
+        <td data-label="Action">
+          <button class="btn-delete" id="del-${d.id}" onclick="deleteOrder('${d.id}')" title="Supprimer">🗑</button>
         </td>
       </tr>`;
     }).join('');
@@ -944,6 +970,29 @@
 
   function esc(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  async function deleteOrder(id) {
+    if (!confirm('Supprimer cette commande définitivement ?')) return;
+
+    const btn = document.getElementById(`del-${id}`);
+    if (btn) btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error();
+
+      allData = allData.filter(d => String(d.id) !== String(id));
+      updateStats(allData);
+      applyFilters();
+    } catch {
+      alert('Erreur lors de la suppression. Réessayez.');
+      if (btn) btn.disabled = false;
+    }
   }
 </script>
 
