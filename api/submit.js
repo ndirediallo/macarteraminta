@@ -50,6 +50,7 @@ export default async function handler(req, res) {
       const msg = encodeURIComponent(
         `🔔 Nouvelle commande Raminta !\n` +
         `👤 ${prenom} ${nom}\n` +
+        `🎂 ${dob}\n` +
         `📞 ${phone}\n` +
         `✉️ ${email}\n` +
         `🪪 ${idType} – ${idNumber}`
