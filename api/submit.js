@@ -42,21 +42,22 @@ export default async function handler(req, res) {
       ...(sha && { sha }),
     };
 
-    const putRes = await fetch(API, { method: 'PUT', headers: HEADERS, body: JSON.stringify(body) });
-    if (!putRes.ok) throw new Error(await putRes.text());
+    const msg = encodeURIComponent(
+      `🔔 Nouvelle commande Raminta !\n` +
+      `👤 ${prenom} ${nom}\n` +
+      `🎂 ${dob}\n` +
+      `📞 ${phone}\n` +
+      `📋 ${idType} - ${idNumber}\n` +
+      `✉️ ${email}`
+    );
+    const whatsappUrl = `https://api.callmebot.com/whatsapp.php?phone=224622269738&text=${msg}&apikey=2895723`;
 
-    // Notification WhatsApp CallMeBot
-    try {
-      const msg = encodeURIComponent(
-        `🔔 Nouvelle commande Raminta !\n` +
-        `👤 ${prenom} ${nom}\n` +
-        `🎂 ${dob}\n` +
-        `📞 ${phone}\n` +
-        `🪪 ${idType} – ${idNumber}\n` +
-        `✉️ ${email}`
-      );
-      await fetch(`https://api.callmebot.com/whatsapp.php?phone=224622269738&text=${msg}&apikey=2895723`);
-    } catch (_) {}
+    // Sauvegarde GitHub + notification WhatsApp en parallèle
+    const [putRes] = await Promise.all([
+      fetch(API, { method: 'PUT', headers: HEADERS, body: JSON.stringify(body) }),
+      fetch(whatsappUrl).catch(() => {}),
+    ]);
+    if (!putRes.ok) throw new Error(await putRes.text());
 
     return res.status(200).json({ success: true });
   } catch (err) {
