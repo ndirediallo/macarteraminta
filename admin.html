@@ -606,6 +606,9 @@
       <label class="fl" for="pwd">Mot de passe</label>
       <input class="fi" type="password" id="pwd" autocomplete="current-password">
 
+      <label class="fl" for="captcha">Sécurité — Combien font <span id="captchaQ"></span> ?</label>
+      <input class="fi" type="number" id="captcha" autocomplete="off">
+
       <button type="submit" class="btn">Se connecter</button>
     </form>
   </div>
@@ -720,30 +723,77 @@
   let statusFilter = 'all';
 
   /* ── AUTH ── */
-  document.getElementById('loginForm').addEventListener('submit', e => {
+  let captchaAnswer = 0;
+
+  function newCaptcha() {
+    const a = Math.floor(Math.random() * 15) + 5;
+    const b = Math.floor(Math.random() * 15) + 5;
+    captchaAnswer = a + b;
+    document.getElementById('captchaQ').textContent = `${a} + ${b}`;
+    document.getElementById('captcha').value = '';
+  }
+  newCaptcha();
+
+  document.getElementById('loginForm').addEventListener('submit', async e => {
     e.preventDefault();
     const usr = document.getElementById('usr').value.trim();
     const pwd = document.getElementById('pwd').value.trim();
+    const cap = document.getElementById('captcha').value.trim();
     const err = document.getElementById('loginErr');
+    const btn = e.target.querySelector('button[type="submit"]');
 
-    if (usr === 'raminta' && pwd === '2025') {
-      sessionStorage.setItem('admin', '1');
-      document.getElementById('loginWrap').style.display = 'none';
-      document.getElementById('dashboard').classList.add('show');
-      loadData();
-    } else {
+    const captchaOk = Number(cap) === captchaAnswer;
+    if (!captchaOk) {
+      err.textContent = 'Réponse de sécurité incorrecte.';
       err.classList.add('show');
-      document.getElementById('usr').classList.add('err');
-      document.getElementById('pwd').classList.add('err');
+      document.getElementById('captcha').classList.add('err');
+      newCaptcha();
+      return;
     }
+
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: usr, password: pwd }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.token) {
+        sessionStorage.setItem('admin', '1');
+        sessionStorage.setItem('adminToken', data.token);
+        document.getElementById('loginWrap').style.display = 'none';
+        document.getElementById('dashboard').classList.add('show');
+        loadData();
+      } else {
+        err.textContent = 'Identifiants incorrects.';
+        err.classList.add('show');
+        document.getElementById('usr').classList.add('err');
+        document.getElementById('pwd').classList.add('err');
+        newCaptcha();
+      }
+    } catch {
+      err.textContent = 'Erreur de connexion. Réessayez.';
+      err.classList.add('show');
+    }
+    btn.disabled = false;
   });
+
+  function authHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + sessionStorage.getItem('adminToken'),
+    };
+  }
 
   function logout() {
     sessionStorage.removeItem('admin');
+    sessionStorage.removeItem('adminToken');
     location.reload();
   }
 
-  if (sessionStorage.getItem('admin') === '1') {
+  if (sessionStorage.getItem('admin') === '1' && sessionStorage.getItem('adminToken')) {
     document.getElementById('loginWrap').style.display = 'none';
     document.getElementById('dashboard').classList.add('show');
     loadData();
@@ -759,7 +809,8 @@
     document.getElementById('tableContainer').style.display = 'none';
 
     try {
-      const res = await fetch('/api/submissions?pwd=2025');
+      const res = await fetch('/api/submissions', { headers: authHeaders() });
+      if (res.status === 401) { logout(); return; }
       allData = await res.json();
 
       if (!Array.isArray(allData) || allData.length === 0) {
@@ -820,7 +871,7 @@
     try {
       const res = await fetch('/api/status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ id, status: next }),
       });
       if (!res.ok) throw new Error();
@@ -981,7 +1032,7 @@
     try {
       const res = await fetch('/api/delete', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders(),
         body: JSON.stringify({ id }),
       });
       if (!res.ok) throw new Error();
