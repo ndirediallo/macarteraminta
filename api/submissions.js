@@ -1,9 +1,11 @@
+const ADMIN_TOKEN = '67724186e8f4241335449f9477c4df637b5988e1ec4e514d';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const { pwd } = req.query;
-  if (pwd !== '2025') return res.status(401).json({ error: 'Non autorisé' });
+  const auth = req.headers.authorization || '';
+  if (auth !== `Bearer ${ADMIN_TOKEN}`) return res.status(401).json({ error: 'Non autorisé' });
 
   const TOKEN = process.env.GITHUB_TOKEN;
   const REPO  = process.env.GITHUB_REPO || 'ndirediallo/macarteraminta';
