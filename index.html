@@ -93,10 +93,13 @@
 
     .form-logo {
       display: flex;
+      align-items: center;
       justify-content: center;
+      flex-wrap: nowrap;
+      gap: 8px;
       margin-bottom: 18px;
     }
-    .form-logo img { height: 52px; width: auto; object-fit: contain; }
+    .form-logo img#logoImg { height: 36px; width: auto; object-fit: contain; flex-shrink: 0; }
     .form-logo-fallback { font-size: 20px; font-weight: 800; color: var(--brand); display: none; }
 
     .form-trust {
@@ -293,6 +296,23 @@
     }
     .btn-new:hover { background: #222880; transform: translateY(-1px); }
 
+    /* ── PARTNER BADGE ── */
+    .partner-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #111827;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .partner-logo {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 480px) {
       .form-card { padding: 28px 18px; }
@@ -327,6 +347,8 @@
       <img src="Logo Raminta.png" alt="Raminta Guinée" id="logoImg"
            onerror="this.style.display='none';document.getElementById('logoFb').style.display='block';">
       <span class="form-logo-fallback" id="logoFb">Raminta Guinée</span>
+      <span class="partner-label">Partenaire</span>
+      <img src="eldorado-logo.png" alt="Eldorado Business Services" class="partner-logo">
     </div>
 
     <div class="form-trust">
