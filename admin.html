@@ -1001,9 +1001,20 @@
     document.getElementById('pdvLoading').style.display = 'block';
     document.getElementById('pdvList').innerHTML = '';
     try {
-      const res = await fetch('/api/pdv', { headers: authHeaders() });
-      if (res.status === 401) { logout(); return; }
-      pdvData = await res.json();
+      // Charger PdV et commandes en parallèle
+      const [pdvRes, subRes] = await Promise.all([
+        fetch('/api/pdv', { headers: authHeaders() }),
+        allData.length ? Promise.resolve(null) : fetch('/api/submissions', { headers: authHeaders() }),
+      ]);
+
+      if (pdvRes.status === 401) { logout(); return; }
+      pdvData = await pdvRes.json();
+
+      if (subRes) {
+        const subs = await subRes.json();
+        if (Array.isArray(subs)) allData = subs;
+      }
+
       renderPdv();
     } catch {
       document.getElementById('pdvLoading').innerHTML = '<p style="color:var(--red);padding:24px">Erreur de chargement.</p>';
@@ -1026,13 +1037,23 @@
       ? `http://localhost:4000`
       : `https://macarte.ramintaguinee.com`;
 
+    // Compter les commandes par slug
+    const countBySlug = {};
+    allData.forEach(d => {
+      if (d.pdvSlug) countBySlug[d.pdvSlug] = (countBySlug[d.pdvSlug] || 0) + 1;
+    });
+
     container.innerHTML = pdvData.map(p => {
-      const link = `${baseUrl}?pdv=${p.slug}`;
+      const link  = `${baseUrl}?pdv=${p.slug}`;
+      const count = countBySlug[p.slug] || 0;
+      const countLabel = count === 0 ? 'Aucune commande'
+                       : count === 1 ? '1 commande'
+                       : `${count} commandes`;
       return `
       <div class="pdv-row" id="pdv-row-${p.id}">
         <div class="pdv-info" id="pdv-info-${p.id}">
           <div class="pdv-nom">${esc(p.nom)}</div>
-          <div class="pdv-date">Créé le ${p.createdAt || '—'}</div>
+          <div class="pdv-date">${countLabel} · Créé le ${p.createdAt || '—'}</div>
         </div>
         <div class="pdv-link-wrap">
           <span class="pdv-link-text" title="${link}">${link}</span>
@@ -1131,10 +1152,15 @@
     const infoEl  = document.getElementById(`pdv-info-${id}`);
     const row     = document.getElementById(`pdv-row-${id}`);
     if (!infoEl) return;
+    const pdv   = pdvData.find(p => String(p.id) === String(id));
+    const count = allData.filter(d => d.pdvSlug === (pdv?.slug || '')).length;
+    const countLabel = count === 0 ? 'Aucune commande'
+                     : count === 1 ? '1 commande'
+                     : `${count} commandes`;
     infoEl.style.flex = '';
     infoEl.innerHTML  = `
       <div class="pdv-nom">${esc(nom)}</div>
-      <div class="pdv-date">Créé le ${createdAt || '—'}</div>`;
+      <div class="pdv-date">${countLabel} · Créé le ${createdAt || '—'}</div>`;
     const linkWrap = row?.querySelector('.pdv-link-wrap');
     if (linkWrap) linkWrap.style.display = '';
   }
