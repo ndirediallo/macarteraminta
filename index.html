@@ -493,8 +493,29 @@
   // Capture du point de vente via URL (?pdv=nom-du-pdv)
   const pdvSlug = new URLSearchParams(window.location.search).get('pdv') || '';
 
-  // Affiche la section carte uniquement si lien PdV
-  if (pdvSlug) document.getElementById('pdvSection').style.display = 'block';
+  // Validation du slug PdV au chargement
+  if (pdvSlug) {
+    // Masque le formulaire pendant la vérification
+    document.querySelector('.main').style.visibility = 'hidden';
+
+    fetch(`/api/check-pdv?slug=${encodeURIComponent(pdvSlug)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (!data.valid) {
+          // PdV supprimé ou inexistant → redirection vers le lien principal
+          window.location.replace('https://macarte.ramintaguinee.com');
+        } else {
+          // PdV valide → afficher le formulaire avec la section carte
+          document.getElementById('pdvSection').style.display = 'block';
+          document.querySelector('.main').style.visibility = 'visible';
+        }
+      })
+      .catch(() => {
+        // Erreur réseau → on laisse passer, on affiche le formulaire
+        document.getElementById('pdvSection').style.display = 'block';
+        document.querySelector('.main').style.visibility = 'visible';
+      });
+  }
 
   const rules = {
     prenom:       v => v.length >= 2,
