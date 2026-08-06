@@ -1009,9 +1009,9 @@
     if (!confirm('Supprimer ce point de vente ?')) return;
     try {
       const res = await fetch('/api/pdv', {
-        method: 'DELETE',
+        method: 'POST',
         headers: authHeaders(),
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ action: 'delete', id }),
       });
       if (!res.ok) throw new Error();
       pdvData = pdvData.filter(p => String(p.id) !== String(id));
