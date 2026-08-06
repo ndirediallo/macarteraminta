@@ -682,16 +682,13 @@
 
     .pdv-edit-wrap {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+      flex-direction: column;
       gap: 8px;
-      flex: 1;
-      min-width: 160px;
+      width: 100%;
     }
     .pdv-edit-input {
-      flex: 1;
-      min-width: 140px;
-      padding: 7px 12px;
+      width: 100%;
+      padding: 9px 13px;
       border: 1.5px solid var(--brand);
       border-radius: 8px;
       font-size: 14px;
@@ -701,10 +698,11 @@
       outline: none;
       background: #fff;
       box-shadow: 0 0 0 3px rgba(45,49,146,.08);
+      box-sizing: border-box;
     }
     .pdv-edit-actions {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-shrink: 0;
     }
     .btn-save {
@@ -1104,7 +1102,14 @@
 
   function startEdit(id, currentNom) {
     const infoEl = document.getElementById(`pdv-info-${id}`);
+    const row    = document.getElementById(`pdv-row-${id}`);
     if (!infoEl) return;
+
+    // Masquer la section lien pour libérer l'espace
+    const linkWrap = row?.querySelector('.pdv-link-wrap');
+    if (linkWrap) linkWrap.style.display = 'none';
+
+    infoEl.style.flex = '1 1 100%';
     infoEl.innerHTML = `
       <div class="pdv-edit-wrap">
         <input class="pdv-edit-input" id="edit-input-${id}" value="${esc(currentNom)}" maxlength="60">
@@ -1113,12 +1118,25 @@
           <button class="btn-cancel-edit" onclick="cancelEdit('${id}', '${esc(currentNom)}')">Annuler</button>
         </div>
       </div>`;
+
     const input = document.getElementById(`edit-input-${id}`);
     if (input) { input.focus(); input.select(); }
     input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') saveEdit(id);
+      if (e.key === 'Enter')  saveEdit(id);
       if (e.key === 'Escape') cancelEdit(id, currentNom);
     });
+  }
+
+  function restoreInfoEl(id, nom, createdAt) {
+    const infoEl  = document.getElementById(`pdv-info-${id}`);
+    const row     = document.getElementById(`pdv-row-${id}`);
+    if (!infoEl) return;
+    infoEl.style.flex = '';
+    infoEl.innerHTML  = `
+      <div class="pdv-nom">${esc(nom)}</div>
+      <div class="pdv-date">Créé le ${createdAt || '—'}</div>`;
+    const linkWrap = row?.querySelector('.pdv-link-wrap');
+    if (linkWrap) linkWrap.style.display = '';
   }
 
   async function saveEdit(id) {
@@ -1130,7 +1148,7 @@
     input.disabled = true;
 
     try {
-      const res = await fetch('/api/pdv', {
+      const res  = await fetch('/api/pdv', {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify({ action: 'rename', id, nom }),
@@ -1138,14 +1156,9 @@
       const data = await res.json();
       if (!res.ok) { alert(data.error || 'Erreur'); input.disabled = false; return; }
 
-      // Mise à jour locale
       const pdv = pdvData.find(p => String(p.id) === String(id));
       if (pdv) pdv.nom = nom;
-
-      const infoEl = document.getElementById(`pdv-info-${id}`);
-      if (infoEl) infoEl.innerHTML = `
-        <div class="pdv-nom">${esc(nom)}</div>
-        <div class="pdv-date">Créé le ${data.pdv?.createdAt || pdv?.createdAt || '—'}</div>`;
+      restoreInfoEl(id, nom, data.pdv?.createdAt || pdv?.createdAt);
     } catch {
       alert('Erreur réseau. Réessayez.');
       if (input) input.disabled = false;
@@ -1153,12 +1166,8 @@
   }
 
   function cancelEdit(id, originalNom) {
-    const pdv     = pdvData.find(p => String(p.id) === String(id));
-    const infoEl  = document.getElementById(`pdv-info-${id}`);
-    if (!infoEl) return;
-    infoEl.innerHTML = `
-      <div class="pdv-nom">${esc(pdv ? pdv.nom : originalNom)}</div>
-      <div class="pdv-date">Créé le ${pdv?.createdAt || '—'}</div>`;
+    const pdv = pdvData.find(p => String(p.id) === String(id));
+    restoreInfoEl(id, pdv ? pdv.nom : originalNom, pdv?.createdAt);
   }
 
   function copyLink(link, id) {
