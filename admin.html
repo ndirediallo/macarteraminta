@@ -657,6 +657,70 @@
     .btn-copy:hover { background: #dde0f7; }
     .btn-copy.copied { background: #f0fdf4; color: var(--green); }
 
+    .btn-edit {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: #FFF7ED;
+      border: 1.5px solid #FED7AA;
+      color: #EA580C;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+    .btn-edit:hover { background: #EA580C; border-color: #EA580C; color: #fff; }
+
+    .pdv-edit-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 160px;
+    }
+    .pdv-edit-input {
+      flex: 1;
+      padding: 7px 12px;
+      border: 1.5px solid var(--brand);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      color: var(--brand);
+      outline: none;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(45,49,146,.08);
+    }
+    .btn-save {
+      padding: 6px 14px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+    .btn-save:hover { background: #15803D; }
+    .btn-cancel-edit {
+      padding: 6px 10px;
+      background: var(--bg);
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-cancel-edit:hover { border-color: var(--red); color: var(--red); }
+
     /* ── MOBILE-FIRST RESPONSIVE ──
     @media (max-width: 900px) {
       .stats-row { grid-template-columns: repeat(2, 1fr); }
@@ -952,7 +1016,7 @@
       const link = `${baseUrl}?pdv=${p.slug}`;
       return `
       <div class="pdv-row" id="pdv-row-${p.id}">
-        <div class="pdv-info">
+        <div class="pdv-info" id="pdv-info-${p.id}">
           <div class="pdv-nom">${esc(p.nom)}</div>
           <div class="pdv-date">Créé le ${p.createdAt || '—'}</div>
         </div>
@@ -960,6 +1024,7 @@
           <span class="pdv-link-text" title="${link}">${link}</span>
           <button class="btn-copy" id="copy-${p.id}" onclick="copyLink('${link}', '${p.id}')">📋 Copier</button>
         </div>
+        <button class="btn-edit" onclick="startEdit('${p.id}', '${esc(p.nom)}')" title="Modifier le nom">✏️</button>
         <button class="btn-delete" onclick="deletePdv('${p.id}')" title="Supprimer">🗑</button>
       </div>`;
     }).join('');
@@ -1019,6 +1084,63 @@
     } catch {
       alert('Erreur lors de la suppression. Réessayez.');
     }
+  }
+
+  function startEdit(id, currentNom) {
+    const infoEl = document.getElementById(`pdv-info-${id}`);
+    if (!infoEl) return;
+    infoEl.innerHTML = `
+      <div class="pdv-edit-wrap">
+        <input class="pdv-edit-input" id="edit-input-${id}" value="${esc(currentNom)}" maxlength="60">
+        <button class="btn-save" onclick="saveEdit('${id}')">✓ Enregistrer</button>
+        <button class="btn-cancel-edit" onclick="cancelEdit('${id}', '${esc(currentNom)}')">Annuler</button>
+      </div>`;
+    const input = document.getElementById(`edit-input-${id}`);
+    if (input) { input.focus(); input.select(); }
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') saveEdit(id);
+      if (e.key === 'Escape') cancelEdit(id, currentNom);
+    });
+  }
+
+  async function saveEdit(id) {
+    const input = document.getElementById(`edit-input-${id}`);
+    if (!input) return;
+    const nom = input.value.trim();
+    if (nom.length < 2) { input.style.borderColor = 'var(--red)'; return; }
+
+    input.disabled = true;
+
+    try {
+      const res = await fetch('/api/pdv', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ action: 'rename', id, nom }),
+      });
+      const data = await res.json();
+      if (!res.ok) { alert(data.error || 'Erreur'); input.disabled = false; return; }
+
+      // Mise à jour locale
+      const pdv = pdvData.find(p => String(p.id) === String(id));
+      if (pdv) pdv.nom = nom;
+
+      const infoEl = document.getElementById(`pdv-info-${id}`);
+      if (infoEl) infoEl.innerHTML = `
+        <div class="pdv-nom">${esc(nom)}</div>
+        <div class="pdv-date">Créé le ${data.pdv?.createdAt || pdv?.createdAt || '—'}</div>`;
+    } catch {
+      alert('Erreur réseau. Réessayez.');
+      if (input) input.disabled = false;
+    }
+  }
+
+  function cancelEdit(id, originalNom) {
+    const pdv     = pdvData.find(p => String(p.id) === String(id));
+    const infoEl  = document.getElementById(`pdv-info-${id}`);
+    if (!infoEl) return;
+    infoEl.innerHTML = `
+      <div class="pdv-nom">${esc(pdv ? pdv.nom : originalNom)}</div>
+      <div class="pdv-date">Créé le ${pdv?.createdAt || '—'}</div>`;
   }
 
   function copyLink(link, id) {
