@@ -53,7 +53,19 @@ export default async function handler(req, res) {
       return res.status(200).json(list);
     }
 
-    // POST — crée un nouveau PdV
+    // POST — crée ou supprime selon le champ "action"
+    if (req.method === 'POST' && req.body.action === 'delete') {
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ error: 'ID manquant' });
+
+      const { list, sha } = await readFile();
+      const newList = list.filter(p => String(p.id) !== String(id));
+      if (newList.length === list.length) return res.status(404).json({ error: 'PdV introuvable' });
+
+      await writeFile(newList, sha, `Suppression PdV ${id}`);
+      return res.status(200).json({ success: true });
+    }
+
     if (req.method === 'POST') {
       const { nom } = req.body;
       if (!nom || nom.trim().length < 2) return res.status(400).json({ error: 'Nom requis (min 2 caractères)' });
@@ -74,19 +86,6 @@ export default async function handler(req, res) {
       list.unshift(pdv);
       await writeFile(list, sha, `Nouveau PdV : ${pdv.nom}`);
       return res.status(200).json({ success: true, pdv });
-    }
-
-    // DELETE — supprime un PdV
-    if (req.method === 'DELETE') {
-      const { id } = req.body;
-      if (!id) return res.status(400).json({ error: 'ID manquant' });
-
-      const { list, sha } = await readFile();
-      const newList = list.filter(p => String(p.id) !== String(id));
-      if (newList.length === list.length) return res.status(404).json({ error: 'PdV introuvable' });
-
-      await writeFile(newList, sha, `Suppression PdV ${id}`);
-      return res.status(200).json({ success: true });
     }
 
     return res.status(405).json({ error: 'Méthode non autorisée' });
