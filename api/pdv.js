@@ -53,7 +53,22 @@ export default async function handler(req, res) {
       return res.status(200).json(list);
     }
 
-    // POST — crée ou supprime selon le champ "action"
+    // POST — crée, renomme ou supprime selon le champ "action"
+    if (req.method === 'POST' && req.body.action === 'rename') {
+      const { id, nom } = req.body;
+      if (!id) return res.status(400).json({ error: 'ID manquant' });
+      if (!nom || nom.trim().length < 2) return res.status(400).json({ error: 'Nom requis' });
+
+      const { list, sha } = await readFile();
+      const idx = list.findIndex(p => String(p.id) === String(id));
+      if (idx === -1) return res.status(404).json({ error: 'PdV introuvable' });
+
+      list[idx].nom = nom.trim();
+      // Le slug reste inchangé pour ne pas casser les liens existants
+      await writeFile(list, sha, `Renommage PdV ${id} → ${nom.trim()}`);
+      return res.status(200).json({ success: true, pdv: list[idx] });
+    }
+
     if (req.method === 'POST' && req.body.action === 'delete') {
       const { id } = req.body;
       if (!id) return res.status(400).json({ error: 'ID manquant' });
