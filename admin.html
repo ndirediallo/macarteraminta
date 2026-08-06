@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Raminta Guinée</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brand: #2D3192;
+      --brand-l: #eef0fc;
+      --green: #16A34A;
+      --red: #DC2626;
+      --text: #111827;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+      --bg: #F4F5FB;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(135deg, #060E1F 0%, #0D1B3E 55%, #16275e 100%);
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.07);
+    }
+
+    .login-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .login-logo img { height: 52px; width: auto; object-fit: contain; }
+
+    .login-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--brand);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .fl {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 6px;
+    }
+
+    .fi {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #FAFAFA;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      margin-bottom: 16px;
+    }
+
+    .fi:focus { border-color: var(--brand); background: #fff; box-shadow: 0 0 0 3px rgba(45,49,146,.1); }
+    .fi.err   { border-color: var(--red); background: #fff5f5; }
+
+    .login-err {
+      font-size: 13px;
+      color: var(--red);
+      text-align: center;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .login-err.show { display: block; }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .btn:hover { background: #222880; transform: translateY(-1px); }
+
+    /* ── DASHBOARD ── */
+    .dashboard { display: none; }
+    .dashboard.show { display: block; }
+
+    .topbar {
+      background: var(--brand);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+    }
+
+    .topbar-logo { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo img { height: 36px; object-fit: contain; filter: brightness(0) invert(1); }
+    .topbar-title { font-size: 15px; font-weight: 700; color: white; }
+
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-user { font-size: 13px; color: rgba(255,255,255,.7); }
+
+    .btn-logout {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,.25); }
+
+    .main-content { padding: 32px 28px; max-width: 1200px; margin: 0 auto; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px 24px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.06);
+      border-left: 4px solid var(--brand-l);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.1); }
+    .stat-card:nth-child(2) { border-left-color: #BFDBFE; }
+    .stat-card:nth-child(3) { border-left-color: #DDD6FE; }
+    .stat-card:nth-child(4) { border-left-color: #BBF7D0; }
+
+    .stat-label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 800; color: var(--brand); }
+    .stat-sub   { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-title { font-size: 17px; font-weight: 800; color: var(--text); }
+
+    .btn-csv {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-csv:hover { background: #15803D; }
+
+    .btn-refresh {
+      background: var(--brand-l);
+      color: var(--brand);
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-refresh:hover { background: #dde0f7; }
+
+    .table-wrap {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 1px 10px rgba(0,0,0,.05);
+      overflow: hidden;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 48px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 24px; height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin-bottom: 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--muted);
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty p { font-size: 15px; }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead { background: var(--bg); border-bottom: 2px solid var(--border); }
+    th {
+      padding: 13px 16px;
+      text-align: left;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      white-space: nowrap;
+    }
+
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg); }
+
+    td {
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .td-name { font-weight: 700; color: var(--brand); }
+    .td-date { color: var(--muted); font-size: 13px; }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--brand-l);
+      color: var(--brand);
+    }
+
+    .row-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--brand-l);
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── STATUS TOGGLE ── */
+    .btn-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      border: 2px solid;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-status.inactive {
+      background: #fff;
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .btn-status.inactive:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: #f0fdf4;
+    }
+    .btn-status.active {
+      background: #f0fdf4;
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .btn-status.active:hover {
+      background: #dcfce7;
+    }
+    .btn-status.loading {
+      opacity: .5;
+      pointer-events: none;
+    }
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-green  { background: var(--green); }
+    .dot-gray   { background: var(--muted); }
+
+    /* ── DELETE BUTTON ── */
+    .btn-delete {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: #FEF2F2;
+      border: 1.5px solid #FECACA;
+      color: var(--red);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+    .btn-delete:hover {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+    .btn-delete:disabled { opacity: .4; pointer-events: none; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 10px rgba(0,0,0,.05);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-search {
+      flex: 1;
+      min-width: 180px;
+      position: relative;
+    }
+    .filter-search input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      outline: none;
+      background: #FAFAFA;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .filter-search input:focus { border-color: var(--brand); background: #fff; box-shadow: 0 0 0 3px rgba(45,49,146,.08); }
+    .filter-search::before {
+      content: '🔍';
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    .filter-status { display: flex; gap: 6px; flex-shrink: 0; }
+    .ftab {
+      padding: 8px 15px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .ftab:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-l); }
+    .ftab.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .ftab.active-green { background: var(--green); border-color: var(--green); color: #fff; }
+
+    .filter-dates {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .filter-dates input[type="date"] {
+      padding: 8px 11px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      outline: none;
+      background: #FAFAFA;
+      transition: border-color .2s;
+      cursor: pointer;
+    }
+    .filter-dates input[type="date"]:focus { border-color: var(--brand); background: #fff; }
+    .filter-sep { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+    .filter-count {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+      padding: 6px 0;
+    }
+    .filter-count strong { color: var(--brand); }
+
+    .btn-clear-filters {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: 6px;
+      transition: all .2s;
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+    .btn-clear-filters:hover { color: var(--red); }
+
+    .filter-select {
+      padding: 9px 34px 9px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      color: var(--text);
+      background: #FAFAFA url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color .2s, box-shadow .2s;
+      flex-shrink: 0;
+    }
+    .filter-select:focus { border-color: var(--brand); background-color: #fff; box-shadow: 0 0 0 3px rgba(45,49,146,.08); }
+
+    .custom-dates {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .custom-dates.show { display: flex; }
+    .custom-dates input[type="date"] {
+      padding: 8px 11px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      outline: none;
+      background: #FAFAFA;
+      transition: border-color .2s;
+      cursor: pointer;
+    }
+    .custom-dates input[type="date"]:focus { border-color: var(--brand); background: #fff; }
+
+    /* ── TABS ── */
+    .tabs-wrap {
+      background: #fff;
+      border-bottom: 2px solid var(--border);
+      padding: 0 28px;
+      display: flex;
+      gap: 4px;
+    }
+    .tab-btn {
+      padding: 14px 20px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 13.5px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+      margin-bottom: -2px;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--brand); }
+    .tab-btn.active { color: var(--brand); border-bottom-color: var(--brand); }
+
+    /* ── PdV SECTION ── */
+    .pdv-add-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px 28px;
+      box-shadow: 0 1px 10px rgba(0,0,0,.05);
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .pdv-add-card .pdv-field { flex: 1; min-width: 220px; }
+    .pdv-add-card label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 6px;
+    }
+    .pdv-add-card input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #FAFAFA;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .pdv-add-card input:focus {
+      border-color: var(--brand);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(45,49,146,.08);
+    }
+    .btn-add-pdv {
+      padding: 11px 22px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-add-pdv:hover { background: #222880; transform: translateY(-1px); }
+    .btn-add-pdv:disabled { opacity: .5; pointer-events: none; }
+    .pdv-err { font-size: 13px; color: var(--red); margin-top: 8px; display: none; width: 100%; }
+    .pdv-err.show { display: block; }
+
+    .pdv-list-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 1px 10px rgba(0,0,0,.05);
+      overflow: hidden;
+    }
+    .pdv-empty { text-align: center; padding: 56px 24px; color: var(--muted); }
+    .pdv-empty-icon { font-size: 36px; margin-bottom: 12px; }
+
+    .pdv-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .pdv-row:last-child { border-bottom: none; }
+    .pdv-row:hover { background: var(--bg); }
+
+    .pdv-info { flex: 1; min-width: 160px; }
+    .pdv-nom  { font-weight: 700; font-size: 15px; color: var(--brand); }
+    .pdv-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .pdv-link-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 2;
+      min-width: 200px;
+    }
+    .pdv-link-text {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--bg);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+    }
+    .btn-copy {
+      padding: 7px 14px;
+      background: var(--brand-l);
+      color: var(--brand);
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-copy:hover { background: #dde0f7; }
+    .btn-copy.copied { background: #f0fdf4; color: var(--green); }
+
+    /* ── MOBILE-FIRST RESPONSIVE ──
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .main-content { padding: 18px 14px; }
+      .topbar { padding: 0 14px; height: 54px; }
+      .topbar-logo img { height: 28px; }
+      .topbar-title { font-size: 13px; }
+      .topbar-user { display: none; }
+      .section-header { flex-direction: column; align-items: flex-start; }
+      .login-card { padding: 36px 24px; }
+      .filter-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+      .filter-search { min-width: unset; }
+      .filter-select { width: 100%; }
+      .custom-dates { flex-wrap: wrap; }
+      .custom-dates input[type="date"] { flex: 1; min-width: 120px; }
+
+      /* ── TABLE → CARD VIEW ON MOBILE ── */
+      .table-wrap {
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        overflow: visible;
+      }
+      #tableContainer { overflow-x: visible !important; }
+      table, tbody { display: block; width: 100%; }
+      thead { display: none; }
+      tbody tr {
+        display: block;
+        background: #fff;
+        border-radius: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 14px rgba(0,0,0,.07);
+        border: 1.5px solid var(--border);
+        overflow: hidden;
+      }
+      tbody tr:hover { background: #fff; transform: none; }
+      td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--border);
+        font-size: 13.5px;
+        min-height: 46px;
+        gap: 8px;
+      }
+      td:last-child { border-bottom: none; }
+      td::before {
+        content: attr(data-label);
+        font-size: 10px;
+        font-weight: 800;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        flex-shrink: 0;
+        min-width: 80px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat-value { font-size: 26px; }
+      .stat-card { padding: 16px 16px; }
+      .stat-label { font-size: 10.5px; }
+      .login-card { padding: 28px 18px; border-radius: 18px; }
+      .login-title { font-size: 18px; }
+      .btn-csv span, .btn-refresh span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="Logo Raminta.png" alt="Raminta" onerror="this.style.display='none'">
+    </div>
+    <div class="login-title">Espace Administrateur</div>
+    <p class="login-sub">Accès réservé à l'équipe Raminta</p>
+
+    <div class="login-err" id="loginErr">Identifiants incorrects.</div>
+
+    <form id="loginForm" novalidate>
+      <label class="fl" for="usr">Nom d'utilisateur</label>
+      <input class="fi" type="text" id="usr" autocomplete="username">
+
+      <label class="fl" for="pwd">Mot de passe</label>
+      <input class="fi" type="password" id="pwd" autocomplete="current-password">
+
+      <label class="fl" for="captcha">Sécurité — Combien font <span id="captchaQ"></span> ?</label>
+      <input class="fi" type="number" id="captcha" autocomplete="off">
+
+      <button type="submit" class="btn">Se connecter</button>
+    </form>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div class="dashboard" id="dashboard">
+
+  <div class="topbar">
+    <div class="topbar-logo">
+      <img src="Logo Raminta.png" alt="Raminta" onerror="this.style.display='none'">
+      <span class="topbar-title">Administration</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-user">raminta</span>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <!-- ── ONGLETS ── -->
+  <div class="tabs-wrap">
+    <button class="tab-btn active" id="tab-commandes" onclick="switchTab('commandes')">📋 Commandes</button>
+    <button class="tab-btn" id="tab-pdv" onclick="switchTab('pdv')">🏪 Points de vente</button>
+  </div>
+
+  <!-- ── PANNEAU COMMANDES ── -->
+  <div class="main-content" id="pane-commandes">
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total commandes</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-sub">depuis le début</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Aujourd'hui</div>
+        <div class="stat-value" id="statToday">—</div>
+        <div class="stat-sub">nouvelles commandes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cette semaine</div>
+        <div class="stat-value" id="statWeek">—</div>
+        <div class="stat-sub">commandes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Activées</div>
+        <div class="stat-value" style="color:var(--green)" id="statActive">—</div>
+        <div class="stat-sub">commandes traitées</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">Commandes reçues</span>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-refresh" onclick="loadData()" id="btnRefresh">↻ Actualiser</button>
+        <button class="btn-csv" onclick="exportCSV()">⬇ Exporter CSV</button>
+      </div>
+    </div>
+
+    <!-- ── FILTER BAR ── -->
+    <div class="filter-bar">
+      <div class="filter-search">
+        <input type="text" id="searchInput" placeholder="Rechercher par nom ou téléphone…" oninput="applyFilters()">
+      </div>
+      <select class="filter-select" id="statusSelect" onchange="applyFilters()">
+        <option value="all">Toutes</option>
+        <option value="active">Activées</option>
+        <option value="inactive">Non activées</option>
+      </select>
+      <select class="filter-select" id="periodSelect" onchange="onPeriodChange()">
+        <option value="all">Toutes périodes</option>
+        <option value="today">Aujourd'hui</option>
+        <option value="week">Cette semaine</option>
+        <option value="month">Ce mois</option>
+        <option value="custom">Date personnalisée</option>
+      </select>
+      <div class="custom-dates" id="customDates">
+        <input type="date" id="dateFrom" oninput="applyFilters()">
+        <span class="filter-sep">au</span>
+        <input type="date" id="dateTo" oninput="applyFilters()">
+      </div>
+      <span class="filter-count" id="filterCount"></span>
+      <button class="btn-clear-filters" onclick="clearFilters()" id="btnClear" style="display:none">Réinitialiser</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="loading" id="loadingState">
+        <div class="spinner"></div><br>Chargement des données…
+      </div>
+      <div class="empty" id="emptyState" style="display:none">
+        <div class="empty-icon">📭</div>
+        <p>Aucune commande pour l'instant.</p>
+      </div>
+      <div id="tableContainer" style="display:none; overflow-x:auto">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Point de vente</th>
+              <th>Carte Visa</th>
+              <th>Nom complet</th>
+              <th>Naissance</th>
+              <th>N° Pièce d'identité</th>
+              <th>Téléphone</th>
+              <th>Email</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- fin pane-commandes -->
+
+  <!-- ── PANNEAU POINTS DE VENTE ── -->
+  <div class="main-content" id="pane-pdv" style="display:none">
+
+    <div class="section-header" style="margin-bottom:20px">
+      <span class="section-title">Points de vente</span>
+    </div>
+
+    <!-- Formulaire ajout -->
+    <div class="pdv-add-card">
+      <div class="pdv-field">
+        <label for="pdvNomInput">Nom du point de vente</label>
+        <input type="text" id="pdvNomInput" placeholder="Ex : Agence Kaloum" maxlength="60">
+      </div>
+      <button class="btn-add-pdv" id="btnAddPdv" onclick="addPdv()">+ Ajouter</button>
+      <div class="pdv-err" id="pdvErr"></div>
+    </div>
+
+    <!-- Liste des PdV -->
+    <div class="pdv-list-card" id="pdvListCard">
+      <div class="loading" id="pdvLoading">
+        <div class="spinner"></div><br>Chargement…
+      </div>
+      <div id="pdvList"></div>
+    </div>
+
+  </div><!-- fin pane-pdv -->
+
+</div><!-- fin dashboard -->
+
+<script>
+  let allData = [];
+  let statusFilter = 'all';
+
+  /* ── ONGLETS ── */
+  function switchTab(tab) {
+    document.getElementById('pane-commandes').style.display = tab === 'commandes' ? 'block' : 'none';
+    document.getElementById('pane-pdv').style.display       = tab === 'pdv'        ? 'block' : 'none';
+    document.getElementById('tab-commandes').classList.toggle('active', tab === 'commandes');
+    document.getElementById('tab-pdv').classList.toggle('active', tab === 'pdv');
+    if (tab === 'pdv') loadPdv();
+  }
+
+  /* ── FORMAT SLUG PdV ── */
+  function fmtPdv(slug) {
+    return slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  /* ── GESTION POINTS DE VENTE ── */
+  let pdvData = [];
+
+  async function loadPdv() {
+    document.getElementById('pdvLoading').style.display = 'block';
+    document.getElementById('pdvList').innerHTML = '';
+    try {
+      const res = await fetch('/api/pdv', { headers: authHeaders() });
+      if (res.status === 401) { logout(); return; }
+      pdvData = await res.json();
+      renderPdv();
+    } catch {
+      document.getElementById('pdvLoading').innerHTML = '<p style="color:var(--red);padding:24px">Erreur de chargement.</p>';
+    }
+  }
+
+  function renderPdv() {
+    document.getElementById('pdvLoading').style.display = 'none';
+    const container = document.getElementById('pdvList');
+    if (!pdvData.length) {
+      container.innerHTML = `
+        <div class="pdv-empty">
+          <div class="pdv-empty-icon">🏪</div>
+          <p>Aucun point de vente pour l'instant.<br>Ajoutez votre premier point de vente ci-dessus.</p>
+        </div>`;
+      return;
+    }
+    const baseUrl = window.location.hostname === 'localhost'
+      ? `http://localhost:4000`
+      : `https://macarte.ramintaguinee.com`;
+
+    container.innerHTML = pdvData.map(p => {
+      const link = `${baseUrl}?pdv=${p.slug}`;
+      return `
+      <div class="pdv-row" id="pdv-row-${p.id}">
+        <div class="pdv-info">
+          <div class="pdv-nom">${esc(p.nom)}</div>
+          <div class="pdv-date">Créé le ${p.createdAt || '—'}</div>
+        </div>
+        <div class="pdv-link-wrap">
+          <span class="pdv-link-text" title="${link}">${link}</span>
+          <button class="btn-copy" id="copy-${p.id}" onclick="copyLink('${link}', '${p.id}')">📋 Copier</button>
+        </div>
+        <button class="btn-delete" onclick="deletePdv('${p.id}')" title="Supprimer">🗑</button>
+      </div>`;
+    }).join('');
+  }
+
+  async function addPdv() {
+    const nom   = document.getElementById('pdvNomInput').value.trim();
+    const err   = document.getElementById('pdvErr');
+    const btn   = document.getElementById('btnAddPdv');
+    err.classList.remove('show');
+
+    if (nom.length < 2) {
+      err.textContent = 'Le nom doit comporter au moins 2 caractères.';
+      err.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '…';
+
+    try {
+      const res = await fetch('/api/pdv', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ nom }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        err.textContent = data.error || 'Erreur lors de la création.';
+        err.classList.add('show');
+      } else {
+        document.getElementById('pdvNomInput').value = '';
+        pdvData.unshift(data.pdv);
+        renderPdv();
+      }
+    } catch {
+      err.textContent = 'Erreur réseau. Réessayez.';
+      err.classList.add('show');
+    }
+
+    btn.disabled = false;
+    btn.textContent = '+ Ajouter';
+  }
+
+  async function deletePdv(id) {
+    if (!confirm('Supprimer ce point de vente ?')) return;
+    try {
+      const res = await fetch('/api/pdv', {
+        method: 'DELETE',
+        headers: authHeaders(),
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error();
+      pdvData = pdvData.filter(p => String(p.id) !== String(id));
+      renderPdv();
+    } catch {
+      alert('Erreur lors de la suppression. Réessayez.');
+    }
+  }
+
+  function copyLink(link, id) {
+    navigator.clipboard.writeText(link).then(() => {
+      const btn = document.getElementById(`copy-${id}`);
+      if (!btn) return;
+      btn.textContent = '✅ Copié !';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Copier'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // Permet de valider l'ajout PdV avec Entrée
+  document.addEventListener('DOMContentLoaded', () => {
+    const inp = document.getElementById('pdvNomInput');
+    if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') addPdv(); });
+  });
+
+  /* ── AUTH ── */
+  let captchaAnswer = 0;
+
+  function newCaptcha() {
+    const a = Math.floor(Math.random() * 15) + 5;
+    const b = Math.floor(Math.random() * 15) + 5;
+    captchaAnswer = a + b;
+    document.getElementById('captchaQ').textContent = `${a} + ${b}`;
+    document.getElementById('captcha').value = '';
+  }
+  newCaptcha();
+
+  document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const usr = document.getElementById('usr').value.trim();
+    const pwd = document.getElementById('pwd').value.trim();
+    const cap = document.getElementById('captcha').value.trim();
+    const err = document.getElementById('loginErr');
+    const btn = e.target.querySelector('button[type="submit"]');
+
+    const captchaOk = Number(cap) === captchaAnswer;
+    if (!captchaOk) {
+      err.textContent = 'Réponse de sécurité incorrecte.';
+      err.classList.add('show');
+      document.getElementById('captcha').classList.add('err');
+      newCaptcha();
+      return;
+    }
+
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: usr, password: pwd }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.token) {
+        sessionStorage.setItem('admin', '1');
+        sessionStorage.setItem('adminToken', data.token);
+        document.getElementById('loginWrap').style.display = 'none';
+        document.getElementById('dashboard').classList.add('show');
+        loadData();
+      } else {
+        err.textContent = 'Identifiants incorrects.';
+        err.classList.add('show');
+        document.getElementById('usr').classList.add('err');
+        document.getElementById('pwd').classList.add('err');
+        newCaptcha();
+      }
+    } catch {
+      err.textContent = 'Erreur de connexion. Réessayez.';
+      err.classList.add('show');
+    }
+    btn.disabled = false;
+  });
+
+  function authHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + sessionStorage.getItem('adminToken'),
+    };
+  }
+
+  function logout() {
+    sessionStorage.removeItem('admin');
+    sessionStorage.removeItem('adminToken');
+    location.reload();
+  }
+
+  if (sessionStorage.getItem('admin') === '1' && sessionStorage.getItem('adminToken')) {
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('dashboard').classList.add('show');
+    loadData();
+  }
+
+  /* ── DATA ── */
+  async function loadData() {
+    const btn = document.getElementById('btnRefresh');
+    btn.disabled = true;
+    btn.textContent = '↻ Chargement…';
+    document.getElementById('loadingState').style.display  = 'block';
+    document.getElementById('emptyState').style.display    = 'none';
+    document.getElementById('tableContainer').style.display = 'none';
+
+    try {
+      const res = await fetch('/api/submissions', { headers: authHeaders() });
+      if (res.status === 401) { logout(); return; }
+      allData = await res.json();
+
+      if (!Array.isArray(allData) || allData.length === 0) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('emptyState').style.display   = 'block';
+        updateStats([]);
+      } else {
+        updateStats(allData);
+        applyFilters();
+      }
+    } catch {
+      document.getElementById('loadingState').innerHTML = '<p style="color:#DC2626">Erreur de chargement. Vérifiez votre connexion.</p>';
+    }
+
+    btn.disabled = false;
+    btn.textContent = '↻ Actualiser';
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = data.map((d, i) => {
+      const isActive = d.status === 'active';
+      return `
+      <tr id="row-${d.id}">
+        <td data-label="#"><div class="row-num">${i + 1}</div></td>
+        <td data-label="Date" class="td-date">${d.date || '—'}</td>
+        <td data-label="Point de vente">${d.pdvSlug ? `<span class="badge" style="background:#fdf4ff;color:#7c3aed">${esc(fmtPdv(d.pdvSlug))}</span>` : '<span style="color:var(--muted);font-size:12px">Direct</span>'}</td>
+        <td data-label="Carte Visa">${d.cardId || d.cardLastFour
+          ? `<span style="font-weight:600;font-size:13px">${esc(d.cardId || '—')}</span><br><span style="font-size:12px;color:var(--muted)">****${esc(d.cardLastFour || '—')}</span>`
+          : '<span style="color:var(--muted);font-size:12px">—</span>'}</td>
+        <td data-label="Nom" class="td-name">${esc(d.prenom)} ${esc(d.nom)}</td>
+        <td data-label="Naissance">${formatDob(d.dob)}</td>
+        <td data-label="N° Pièce d'identité"><span class="badge">${esc(d.idType || '—')}</span><br>
+            <span style="font-size:12px;color:#6B7280">${esc(d.idNumber || '')}</span></td>
+        <td data-label="Téléphone">${esc(d.phone || '—')}</td>
+        <td data-label="Email">${esc(d.email || '—')}</td>
+        <td data-label="Statut">
+          <button class="btn-status ${isActive ? 'active' : 'inactive'}"
+                  id="btn-${d.id}"
+                  onclick="toggleStatus('${d.id}', '${isActive ? 'active' : 'inactive'}')">
+            <span class="dot ${isActive ? 'dot-green' : 'dot-gray'}"></span>
+            ${isActive ? 'Activé' : 'Non activé'}
+          </button>
+        </td>
+        <td data-label="Action">
+          <button class="btn-delete" id="del-${d.id}" onclick="deleteOrder('${d.id}')" title="Supprimer">🗑</button>
+        </td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('loadingState').style.display    = 'none';
+    document.getElementById('tableContainer').style.display  = 'block';
+  }
+
+  async function toggleStatus(id, current) {
+    const next = current === 'active' ? 'inactive' : 'active';
+    const btn  = document.getElementById(`btn-${id}`);
+    if (!btn) return;
+
+    btn.classList.add('loading');
+
+    try {
+      const res = await fetch('/api/status', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ id, status: next }),
+      });
+      if (!res.ok) throw new Error();
+
+      const entry = allData.find(d => String(d.id) === String(id));
+      if (entry) entry.status = next;
+
+      const isActive = next === 'active';
+      btn.className  = `btn-status ${isActive ? 'active' : 'inactive'}`;
+      btn.innerHTML  = `<span class="dot ${isActive ? 'dot-green' : 'dot-gray'}"></span>${isActive ? 'Activé' : 'Non activé'}`;
+      btn.setAttribute('onclick', `toggleStatus('${id}', '${next}')`);
+
+      updateStats(allData);
+    } catch {
+      alert('Erreur lors de la mise à jour du statut. Réessayez.');
+    }
+
+    btn.classList.remove('loading');
+  }
+
+  function updateStats(data) {
+    document.getElementById('statTotal').textContent = data.length;
+
+    const today = new Date().toLocaleDateString('fr-FR');
+    const todayCount = data.filter(d => (d.date || '').startsWith(today));
+    document.getElementById('statToday').textContent = todayCount.length;
+
+    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+    document.getElementById('statWeek').textContent = data.length;
+
+    const activeCount = data.filter(d => d.status === 'active').length;
+    document.getElementById('statActive').textContent = activeCount;
+  }
+
+  /* ── CSV EXPORT ── */
+  function exportCSV() {
+    if (!allData.length) return alert('Aucune donnée à exporter.');
+
+    const headers = ['Date', 'Point de vente', 'ID Carte Visa', '4 derniers chiffres', 'Prénom', 'Nom', 'Date naissance', 'Type ID', 'N° ID', 'Téléphone', 'Email'];
+    const rows = allData.map(d => [
+      d.date, d.pdvSlug ? fmtPdv(d.pdvSlug) : '', d.cardId, d.cardLastFour,
+      d.prenom, d.nom, d.dob, d.idType, d.idNumber, d.phone, d.email
+    ].map(v => `"${(v || '').replace(/"/g, '""')}"`).join(','));
+
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = `commandes-raminta-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+  }
+
+  /* ── FILTERS ── */
+  function onPeriodChange() {
+    const val = document.getElementById('periodSelect').value;
+    const cd  = document.getElementById('customDates');
+    cd.classList.toggle('show', val === 'custom');
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const search = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+    const status = document.getElementById('statusSelect')?.value || 'all';
+    const period = document.getElementById('periodSelect')?.value || 'all';
+
+    const now = new Date();
+    const todayStr = now.toLocaleDateString('fr-FR'); // DD/MM/YYYY
+
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
+    startOfWeek.setHours(0,0,0,0);
+
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    const dateFrom = document.getElementById('dateFrom')?.value || '';
+    const dateTo   = document.getElementById('dateTo')?.value   || '';
+
+    const filtered = allData.filter(d => {
+      // Search
+      if (search) {
+        const name  = `${d.prenom || ''} ${d.nom || ''}`.toLowerCase();
+        const phone = (d.phone || '').toLowerCase();
+        if (!name.includes(search) && !phone.includes(search)) return false;
+      }
+
+      // Status
+      if (status === 'active'   && d.status !== 'active')  return false;
+      if (status === 'inactive' && d.status === 'active')   return false;
+
+      // Period
+      if (period !== 'all') {
+        const parts = (d.date || '').split(' ')[0].split('/'); // DD MM YYYY
+        if (parts.length !== 3) return false;
+        const entry = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+        if (period === 'today') {
+          if ((d.date || '').split(' ')[0] !== todayStr) return false;
+        } else if (period === 'week') {
+          if (entry < startOfWeek) return false;
+        } else if (period === 'month') {
+          if (entry < startOfMonth) return false;
+        } else if (period === 'custom') {
+          if (dateFrom && entry < new Date(dateFrom)) return false;
+          if (dateTo) { const t = new Date(dateTo); t.setHours(23,59,59); if (entry > t) return false; }
+        }
+      }
+      return true;
+    });
+
+    const hasFilters = search || status !== 'all' || period !== 'all';
+    const btnClear = document.getElementById('btnClear');
+    if (btnClear) btnClear.style.display = hasFilters ? 'inline-block' : 'none';
+
+    const countEl = document.getElementById('filterCount');
+    if (countEl) countEl.innerHTML = allData.length > 0
+      ? `<strong>${filtered.length}</strong> / ${allData.length} commande${allData.length > 1 ? 's' : ''}`
+      : '';
+
+    if (filtered.length === 0) {
+      document.getElementById('tableContainer').style.display = 'none';
+      document.getElementById('loadingState').style.display   = 'none';
+      const es = document.getElementById('emptyState');
+      es.style.display = 'block';
+      es.innerHTML = '<div class="empty-icon">🔍</div><p>Aucun résultat pour cette recherche.</p>';
+    } else {
+      document.getElementById('emptyState').style.display = 'none';
+      renderTable(filtered);
+    }
+  }
+
+  function clearFilters() {
+    document.getElementById('searchInput').value  = '';
+    document.getElementById('statusSelect').value = 'all';
+    document.getElementById('periodSelect').value = 'all';
+    document.getElementById('dateFrom').value     = '';
+    document.getElementById('dateTo').value       = '';
+    document.getElementById('customDates').classList.remove('show');
+    applyFilters();
+  }
+
+  function formatDob(dob) {
+    if (!dob) return '—';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
+      const [y, m, d] = dob.split('-');
+      return `${d}/${m}/${y}`;
+    }
+    return dob;
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  async function deleteOrder(id) {
+    if (!confirm('Supprimer cette commande définitivement ?')) return;
+
+    const btn = document.getElementById(`del-${id}`);
+    if (btn) btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/delete', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error();
+
+      allData = allData.filter(d => String(d.id) !== String(id));
+      updateStats(allData);
+      applyFilters();
+    } catch {
+      alert('Erreur lors de la suppression. Réessayez.');
+      if (btn) btn.disabled = false;
+    }
+  }
+</script>
+
+</body>
+</html>
