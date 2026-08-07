@@ -236,6 +236,89 @@
       gap: 5px;
     }
 
+    /* ── RECAP ── */
+    .recap { display: none; }
+    .recap.show { display: block; }
+
+    .recap-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .recap-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .recap-block {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .recap-block-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 10px;
+    }
+    .recap-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+    .recap-row:last-child { border-bottom: none; }
+    .recap-label { color: var(--muted); font-size: 12px; flex-shrink: 0; }
+    .recap-value { font-weight: 600; color: var(--text); text-align: right; }
+
+    .recap-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn-back {
+      flex: 1;
+      padding: 13px;
+      background: #fff;
+      color: var(--brand);
+      border: 2px solid var(--brand);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-back:hover { background: var(--brand-l); }
+    .btn-confirm {
+      flex: 2;
+      padding: 13px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 14px rgba(22,163,74,.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-confirm:hover { background: var(--green-h); transform: translateY(-1px); }
+    .btn-confirm:disabled { opacity: .7; pointer-events: none; }
+
     /* ── SUCCESS ── */
     .success { display: none; text-align: center; padding: 8px 0; }
     .success.show { display: block; }
@@ -463,6 +546,20 @@
 
     </form>
 
+    <!-- ── RÉCAPITULATIF ── -->
+    <div class="recap" id="recap">
+      <div class="recap-title">Vérifiez vos informations</div>
+      <div class="recap-sub">Confirmez avant d'envoyer votre commande.</div>
+      <div id="recapContent"></div>
+      <div class="recap-actions">
+        <button class="btn-back" onclick="showForm()">← Modifier</button>
+        <button class="btn-confirm" id="btnConfirm" onclick="submitOrder()">
+          <span class="btn-spinner" id="confirmSpinner"></span>
+          Confirmer ma commande
+        </button>
+      </div>
+    </div>
+
     <div class="success" id="success">
       <div class="success-circle">✓</div>
       <h2>Demande envoyée !</h2>
@@ -582,17 +679,62 @@
     document.getElementById(s).addEventListener('blur', () => check('dob'));
   });
 
-  document.getElementById('orderForm').addEventListener('submit', async e => {
+  const g = id => document.getElementById(id)?.value.trim() || '';
+
+  document.getElementById('orderForm').addEventListener('submit', e => {
     e.preventDefault();
     const valid = Object.keys(rules).map(check).every(Boolean);
     if (!valid) return;
 
-    const g = id => document.getElementById(id).value.trim();
-    const btn     = document.querySelector('.btn-submit');
-    const spinner = document.getElementById('submitSpinner');
-    btn.disabled = true;
+    // Construire le récapitulatif
+    const idTypeVal   = g('idType');
+    const idNumberVal = g('idNumber');
+    const cardIdVal   = g('cardId');
+    const cardLast    = g('cardLastFour');
+
+    let html = '';
+
+    // Bloc carte (PdV uniquement, si rempli)
+    if (pdvSlug && (cardIdVal || cardLast)) {
+      html += `
+        <div class="recap-block">
+          <div class="recap-block-title">💳 Carte Visa</div>
+          ${cardIdVal ? `<div class="recap-row"><span class="recap-label">ID Carte</span><span class="recap-value">${esc(cardIdVal)}</span></div>` : ''}
+          ${cardLast  ? `<div class="recap-row"><span class="recap-label">4 derniers chiffres</span><span class="recap-value">****${esc(cardLast)}</span></div>` : ''}
+        </div>`;
+    }
+
+    // Bloc infos personnelles
+    html += `
+      <div class="recap-block">
+        <div class="recap-block-title">👤 Informations personnelles</div>
+        <div class="recap-row"><span class="recap-label">Prénom</span><span class="recap-value">${esc(g('prenom'))}</span></div>
+        <div class="recap-row"><span class="recap-label">Nom</span><span class="recap-value">${esc(g('nom'))}</span></div>
+        <div class="recap-row"><span class="recap-label">Date de naissance</span><span class="recap-value">${esc(g('dob'))}</span></div>
+        ${idTypeVal   ? `<div class="recap-row"><span class="recap-label">Type de pièce</span><span class="recap-value">${esc(idTypeVal)}</span></div>` : ''}
+        ${idNumberVal ? `<div class="recap-row"><span class="recap-label">N° pièce</span><span class="recap-value">${esc(idNumberVal)}</span></div>` : ''}
+        <div class="recap-row"><span class="recap-label">Téléphone</span><span class="recap-value">${esc(g('phone'))}</span></div>
+        <div class="recap-row"><span class="recap-label">Email</span><span class="recap-value">${esc(g('email'))}</span></div>
+      </div>`;
+
+    document.getElementById('recapContent').innerHTML = html;
+
+    // Afficher le récap, masquer le formulaire
+    document.getElementById('orderForm').style.display = 'none';
+    document.getElementById('recap').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function showForm() {
+    document.getElementById('recap').classList.remove('show');
+    document.getElementById('orderForm').style.display = 'block';
+  }
+
+  async function submitOrder() {
+    const btn     = document.getElementById('btnConfirm');
+    const spinner = document.getElementById('confirmSpinner');
+    btn.disabled  = true;
     spinner.style.display = 'inline-block';
-    btn.lastChild.textContent = ' Envoi en cours…';
 
     try {
       const res = await fetch('/api/submit', {
@@ -610,16 +752,19 @@
     } catch {
       btn.disabled = false;
       spinner.style.display = 'none';
-      btn.lastChild.textContent = ' Commander ma carte Visa';
       alert('Erreur lors de l\'envoi. Veuillez réessayer.');
       return;
     }
 
-    document.getElementById('orderForm').style.display = 'none';
+    document.getElementById('recap').classList.remove('show');
     document.querySelector('.form-trust').style.display = 'none';
     document.querySelector('.recharge-info').style.display = 'none';
     document.getElementById('success').classList.add('show');
-  });
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
 
   function resetForm() {
     document.getElementById('orderForm').reset();
