@@ -852,6 +852,7 @@
   <!-- ── ONGLETS ── -->
   <div class="tabs-wrap">
     <button class="tab-btn active" id="tab-commandes" onclick="switchTab('commandes')">📋 Commandes</button>
+    <button class="tab-btn" id="tab-recharges" onclick="switchTab('recharges')">💰 Recharges</button>
     <button class="tab-btn" id="tab-pdv" onclick="switchTab('pdv')">🏪 Points de vente</button>
   </div>
 
@@ -947,6 +948,95 @@
 
   </div><!-- fin pane-commandes -->
 
+  <!-- ── PANNEAU RECHARGES ── -->
+  <div class="main-content" id="pane-recharges" style="display:none">
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total recharges</div>
+        <div class="stat-value" id="rStatTotal">—</div>
+        <div class="stat-sub">depuis le début</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Aujourd'hui</div>
+        <div class="stat-value" id="rStatToday">—</div>
+        <div class="stat-sub">nouvelles demandes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Montant total</div>
+        <div class="stat-value" id="rStatMontant" style="font-size:20px">—</div>
+        <div class="stat-sub">GNF demandés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Traitées</div>
+        <div class="stat-value" style="color:var(--green)" id="rStatActive">—</div>
+        <div class="stat-sub">recharges traitées</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">Demandes de recharge</span>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-refresh" onclick="loadRecharges()" id="rBtnRefresh">↻ Actualiser</button>
+        <button class="btn-csv" onclick="exportRechargeCSV()">⬇ Exporter CSV</button>
+      </div>
+    </div>
+
+    <!-- ── FILTER BAR ── -->
+    <div class="filter-bar">
+      <div class="filter-search">
+        <input type="text" id="rSearchInput" placeholder="Rechercher par nom…" oninput="applyRechargeFilters()">
+      </div>
+      <select class="filter-select" id="rStatusSelect" onchange="applyRechargeFilters()">
+        <option value="all">Toutes</option>
+        <option value="active">Traitées</option>
+        <option value="inactive">En attente</option>
+      </select>
+      <select class="filter-select" id="rPeriodSelect" onchange="onRechargePeriodChange()">
+        <option value="all">Toutes périodes</option>
+        <option value="today">Aujourd'hui</option>
+        <option value="week">Cette semaine</option>
+        <option value="month">Ce mois</option>
+        <option value="custom">Date personnalisée</option>
+      </select>
+      <div class="custom-dates" id="rCustomDates">
+        <input type="date" id="rDateFrom" oninput="applyRechargeFilters()">
+        <span class="filter-sep">au</span>
+        <input type="date" id="rDateTo" oninput="applyRechargeFilters()">
+      </div>
+      <span class="filter-count" id="rFilterCount"></span>
+      <button class="btn-clear-filters" onclick="clearRechargeFilters()" id="rBtnClear" style="display:none">Réinitialiser</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="loading" id="rLoadingState">
+        <div class="spinner"></div><br>Chargement des données…
+      </div>
+      <div class="empty" id="rEmptyState" style="display:none">
+        <div class="empty-icon">📭</div>
+        <p>Aucune demande de recharge pour l'instant.</p>
+      </div>
+      <div id="rTableContainer" style="display:none; overflow-x:auto">
+        <table id="rDataTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Point de vente</th>
+              <th>Carte Visa</th>
+              <th>Nom complet</th>
+              <th>Montant</th>
+              <th>Statut</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="rTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- fin pane-recharges -->
+
   <!-- ── PANNEAU POINTS DE VENTE ── -->
   <div class="main-content" id="pane-pdv" style="display:none">
 
@@ -979,14 +1069,18 @@
 <script>
   let allData = [];
   let statusFilter = 'all';
+  let rechargeData = [];
 
   /* ── ONGLETS ── */
   function switchTab(tab) {
     document.getElementById('pane-commandes').style.display = tab === 'commandes' ? 'block' : 'none';
+    document.getElementById('pane-recharges').style.display = tab === 'recharges' ? 'block' : 'none';
     document.getElementById('pane-pdv').style.display       = tab === 'pdv'        ? 'block' : 'none';
     document.getElementById('tab-commandes').classList.toggle('active', tab === 'commandes');
+    document.getElementById('tab-recharges').classList.toggle('active', tab === 'recharges');
     document.getElementById('tab-pdv').classList.toggle('active', tab === 'pdv');
     if (tab === 'pdv') loadPdv();
+    if (tab === 'recharges' && rechargeData.length === 0) loadRecharges();
   }
 
   /* ── FORMAT SLUG PdV ── */
@@ -1535,6 +1629,234 @@
       allData = allData.filter(d => String(d.id) !== String(id));
       updateStats(allData);
       applyFilters();
+    } catch {
+      alert('Erreur lors de la suppression. Réessayez.');
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  /* ══════════════════ RECHARGES ══════════════════ */
+
+  async function loadRecharges() {
+    const btn = document.getElementById('rBtnRefresh');
+    btn.disabled = true;
+    btn.textContent = '↻ Chargement…';
+    document.getElementById('rLoadingState').style.display   = 'block';
+    document.getElementById('rEmptyState').style.display     = 'none';
+    document.getElementById('rTableContainer').style.display = 'none';
+
+    try {
+      const res = await fetch('/api/recharges', { headers: authHeaders() });
+      if (res.status === 401) { logout(); return; }
+      rechargeData = await res.json();
+
+      if (!Array.isArray(rechargeData) || rechargeData.length === 0) {
+        document.getElementById('rLoadingState').style.display = 'none';
+        document.getElementById('rEmptyState').style.display   = 'block';
+        updateRechargeStats([]);
+      } else {
+        updateRechargeStats(rechargeData);
+        applyRechargeFilters();
+      }
+    } catch {
+      document.getElementById('rLoadingState').innerHTML = '<p style="color:#DC2626">Erreur de chargement. Vérifiez votre connexion.</p>';
+    }
+
+    btn.disabled = false;
+    btn.textContent = '↻ Actualiser';
+  }
+
+  function renderRechargeTable(data) {
+    const tbody = document.getElementById('rTableBody');
+    tbody.innerHTML = data.map((d, i) => {
+      const isActive = d.status === 'active';
+      return `
+      <tr id="r-row-${d.id}">
+        <td data-label="#"><div class="row-num">${i + 1}</div></td>
+        <td data-label="Date" class="td-date">${d.date || '—'}</td>
+        <td data-label="Point de vente">${d.pdvSlug ? `<span class="badge" style="background:#fdf4ff;color:#7c3aed">${esc(fmtPdv(d.pdvSlug))}</span>` : '<span style="color:var(--muted);font-size:12px">Direct</span>'}</td>
+        <td data-label="Carte Visa"><span style="font-weight:600;font-size:13px">${esc(d.cardId || '—')}</span><br><span style="font-size:12px;color:var(--muted)">****${esc(d.cardLastFour || '—')}</span></td>
+        <td data-label="Nom" class="td-name">${esc(d.prenom)} ${esc(d.nom)}</td>
+        <td data-label="Montant" style="font-weight:700;color:var(--green)">${Number(d.montant || 0).toLocaleString('fr-FR')} GNF</td>
+        <td data-label="Statut">
+          <button class="btn-status ${isActive ? 'active' : 'inactive'}"
+                  id="r-btn-${d.id}"
+                  onclick="toggleRechargeStatus('${d.id}', '${isActive ? 'active' : 'inactive'}')">
+            <span class="dot ${isActive ? 'dot-green' : 'dot-gray'}"></span>
+            ${isActive ? 'Traitée' : 'En attente'}
+          </button>
+        </td>
+        <td data-label="Action">
+          <button class="btn-delete" id="r-del-${d.id}" onclick="deleteRecharge('${d.id}')" title="Supprimer">🗑</button>
+        </td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('rLoadingState').style.display   = 'none';
+    document.getElementById('rTableContainer').style.display = 'block';
+  }
+
+  async function toggleRechargeStatus(id, current) {
+    const next = current === 'active' ? 'inactive' : 'active';
+    const btn  = document.getElementById(`r-btn-${id}`);
+    if (!btn) return;
+
+    btn.classList.add('loading');
+
+    try {
+      const res = await fetch('/api/recharge-status', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ id, status: next }),
+      });
+      if (!res.ok) throw new Error();
+
+      const entry = rechargeData.find(d => String(d.id) === String(id));
+      if (entry) entry.status = next;
+
+      const isActive = next === 'active';
+      btn.className  = `btn-status ${isActive ? 'active' : 'inactive'}`;
+      btn.innerHTML  = `<span class="dot ${isActive ? 'dot-green' : 'dot-gray'}"></span>${isActive ? 'Traitée' : 'En attente'}`;
+      btn.setAttribute('onclick', `toggleRechargeStatus('${id}', '${next}')`);
+
+      updateRechargeStats(rechargeData);
+    } catch {
+      alert('Erreur lors de la mise à jour du statut. Réessayez.');
+    }
+
+    btn.classList.remove('loading');
+  }
+
+  function updateRechargeStats(data) {
+    document.getElementById('rStatTotal').textContent = data.length;
+
+    const today = new Date().toLocaleDateString('fr-FR');
+    const todayCount = data.filter(d => (d.date || '').startsWith(today));
+    document.getElementById('rStatToday').textContent = todayCount.length;
+
+    const totalMontant = data.reduce((sum, d) => sum + (Number(d.montant) || 0), 0);
+    document.getElementById('rStatMontant').textContent = totalMontant.toLocaleString('fr-FR');
+
+    const activeCount = data.filter(d => d.status === 'active').length;
+    document.getElementById('rStatActive').textContent = activeCount;
+  }
+
+  function exportRechargeCSV() {
+    if (!rechargeData.length) return alert('Aucune donnée à exporter.');
+
+    const headers = ['Date', 'Point de vente', 'ID Carte Visa', '4 derniers chiffres', 'Prénom', 'Nom', 'Montant (GNF)', 'Statut'];
+    const rows = rechargeData.map(d => [
+      d.date, d.pdvSlug ? fmtPdv(d.pdvSlug) : '', d.cardId, d.cardLastFour,
+      d.prenom, d.nom, d.montant, d.status === 'active' ? 'Traitée' : 'En attente'
+    ].map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(','));
+
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = `recharges-raminta-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+  }
+
+  function onRechargePeriodChange() {
+    const val = document.getElementById('rPeriodSelect').value;
+    const cd  = document.getElementById('rCustomDates');
+    cd.classList.toggle('show', val === 'custom');
+    applyRechargeFilters();
+  }
+
+  function applyRechargeFilters() {
+    const search = (document.getElementById('rSearchInput')?.value || '').trim().toLowerCase();
+    const status = document.getElementById('rStatusSelect')?.value || 'all';
+    const period = document.getElementById('rPeriodSelect')?.value || 'all';
+
+    const now = new Date();
+    const todayStr = now.toLocaleDateString('fr-FR');
+
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
+    startOfWeek.setHours(0,0,0,0);
+
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    const dateFrom = document.getElementById('rDateFrom')?.value || '';
+    const dateTo   = document.getElementById('rDateTo')?.value   || '';
+
+    const filtered = rechargeData.filter(d => {
+      if (search) {
+        const name = `${d.prenom || ''} ${d.nom || ''}`.toLowerCase();
+        if (!name.includes(search)) return false;
+      }
+
+      if (status === 'active'   && d.status !== 'active')  return false;
+      if (status === 'inactive' && d.status === 'active')  return false;
+
+      if (period !== 'all') {
+        const parts = (d.date || '').split(' ')[0].split('/');
+        if (parts.length !== 3) return false;
+        const entry = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+        if (period === 'today') {
+          if ((d.date || '').split(' ')[0] !== todayStr) return false;
+        } else if (period === 'week') {
+          if (entry < startOfWeek) return false;
+        } else if (period === 'month') {
+          if (entry < startOfMonth) return false;
+        } else if (period === 'custom') {
+          if (dateFrom && entry < new Date(dateFrom)) return false;
+          if (dateTo) { const t = new Date(dateTo); t.setHours(23,59,59); if (entry > t) return false; }
+        }
+      }
+      return true;
+    });
+
+    const hasFilters = search || status !== 'all' || period !== 'all';
+    const btnClear = document.getElementById('rBtnClear');
+    if (btnClear) btnClear.style.display = hasFilters ? 'inline-block' : 'none';
+
+    const countEl = document.getElementById('rFilterCount');
+    if (countEl) countEl.innerHTML = rechargeData.length > 0
+      ? `<strong>${filtered.length}</strong> / ${rechargeData.length} recharge${rechargeData.length > 1 ? 's' : ''}`
+      : '';
+
+    if (filtered.length === 0) {
+      document.getElementById('rTableContainer').style.display = 'none';
+      document.getElementById('rLoadingState').style.display   = 'none';
+      const es = document.getElementById('rEmptyState');
+      es.style.display = 'block';
+      es.innerHTML = '<div class="empty-icon">🔍</div><p>Aucun résultat pour cette recherche.</p>';
+    } else {
+      document.getElementById('rEmptyState').style.display = 'none';
+      renderRechargeTable(filtered);
+    }
+  }
+
+  function clearRechargeFilters() {
+    document.getElementById('rSearchInput').value  = '';
+    document.getElementById('rStatusSelect').value = 'all';
+    document.getElementById('rPeriodSelect').value = 'all';
+    document.getElementById('rDateFrom').value     = '';
+    document.getElementById('rDateTo').value       = '';
+    document.getElementById('rCustomDates').classList.remove('show');
+    applyRechargeFilters();
+  }
+
+  async function deleteRecharge(id) {
+    if (!confirm('Supprimer cette demande de recharge définitivement ?')) return;
+
+    const btn = document.getElementById(`r-del-${id}`);
+    if (btn) btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/recharge-delete', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error();
+
+      rechargeData = rechargeData.filter(d => String(d.id) !== String(id));
+      updateRechargeStats(rechargeData);
+      applyRechargeFilters();
     } catch {
       alert('Erreur lors de la suppression. Réessayez.');
       if (btn) btn.disabled = false;
