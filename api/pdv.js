@@ -1,4 +1,4 @@
-const ADMIN_TOKEN = '67724186e8f4241335449f9477c4df637b5988e1ec4e514d';
+const ADMIN_TOKEN = '3d6846f0e413ad2971d9993e08a92747f4366d32085e6d79';
 
 const FILE    = 'pdv.json';
 const API_URL = `https://api.github.com/repos/${process.env.GITHUB_REPO || 'ndirediallo/macarteraminta'}/contents/${FILE}`;

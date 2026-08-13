@@ -1,6 +1,6 @@
 const ADMIN_USER  = 'adminraminta@';
-const ADMIN_PASS  = '@2025@';
-const ADMIN_TOKEN = '67724186e8f4241335449f9477c4df637b5988e1ec4e514d';
+const ADMIN_PASS  = 'bMzHfMSLUAonCiBy';
+const ADMIN_TOKEN = '3d6846f0e413ad2971d9993e08a92747f4366d32085e6d79';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
