@@ -163,6 +163,16 @@
       color: var(--muted);
       margin: -4px 0 10px;
     }
+    .fee-notice {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-radius: 10px;
+      font-size: 12.5px;
+      color: #92400E;
+      line-height: 1.5;
+    }
     .montant-presets {
       display: flex;
       flex-wrap: wrap;
@@ -369,6 +379,7 @@
           <input type="text" id="montant" placeholder="Ex : 500 000" inputmode="numeric">
           <span class="montant-currency">GNF</span>
         </div>
+        <div class="fee-notice">ℹ️ Des frais de recharge de <strong>29 500 GNF</strong> s'appliquent, pour tout montant jusqu'à 2 000 000 GNF.</div>
         <div class="err-msg" id="e-montant">Montant invalide.</div>
       </div>
 
@@ -489,6 +500,8 @@
     if (!valid) return;
 
     const montantVal = rawMontant(g('montant'));
+    const FRAIS = 29500;
+    const totalVal = montantVal + FRAIS;
 
     const html = `
       <div class="recap-block">
@@ -500,7 +513,9 @@
       </div>
       <div class="recap-block">
         <div class="recap-block-title">💰 Montant</div>
-        <div class="recap-row"><span class="recap-label">Montant à recharger</span><span class="recap-value" style="font-size:17px;color:var(--green)">${montantVal.toLocaleString('fr-FR')} GNF</span></div>
+        <div class="recap-row"><span class="recap-label">Montant à recharger</span><span class="recap-value">${montantVal.toLocaleString('fr-FR')} GNF</span></div>
+        <div class="recap-row"><span class="recap-label">Frais de recharge</span><span class="recap-value">${FRAIS.toLocaleString('fr-FR')} GNF</span></div>
+        <div class="recap-row"><span class="recap-label" style="font-weight:700">Total à payer</span><span class="recap-value" style="font-size:17px;color:var(--green)">${totalVal.toLocaleString('fr-FR')} GNF</span></div>
       </div>`;
 
     document.getElementById('recapContent').innerHTML = html;
