@@ -128,7 +128,8 @@
     "idType": "Passeport",
     "idNumber": "000778732",
     "phone": "620 58 26 98",
-    "email": "louabenoit8@gmail.com"
+    "email": "louabenoit8@gmail.com",
+    "status": "active"
   },
   {
     "id": 1786751561792,
